@@ -12,6 +12,7 @@ namespace Education_Center.Forms
 {
     public partial class Manager : Form
     {
+        
         public Manager()
         {
             InitializeComponent();
@@ -121,6 +122,33 @@ namespace Education_Center.Forms
             btnShowGroups.Enabled = false;
             btnDeleteClient.Enabled = false;
             btnDeleteGroup.Enabled = false;
+        }
+
+        private void rbClients_CheckedChanged(object sender, EventArgs e)
+        {
+            RadioButton rb = (RadioButton)sender;
+            //this.InsertToDataGrid(mainDataSet.Tables[(string)rb.Tag]);
+        }
+
+        private void btnCalculate_Click(object sender, EventArgs e)
+        {
+            /*DataRowView drvData = (DataRowView)currManagerTotal.Current;
+            CalculateTotalPage(drvData.Row);*/
+        }
+
+        private void btnNextDate_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void btnPrevDate_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void btnShowPaymentTypeForm_Click(object sender, EventArgs e)
+        {
+
         }
     }
 }

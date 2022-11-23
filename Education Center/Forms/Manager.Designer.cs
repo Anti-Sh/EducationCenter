@@ -57,9 +57,9 @@
             this.panel3 = new System.Windows.Forms.Panel();
             this.dgGroups = new System.Windows.Forms.DataGrid();
             this.splitter2 = new System.Windows.Forms.Splitter();
-            this.dataGrid1 = new System.Windows.Forms.DataGrid();
+            this.dgClients = new System.Windows.Forms.DataGrid();
             this.panel4 = new System.Windows.Forms.Panel();
-            this.dataGrid2 = new System.Windows.Forms.DataGrid();
+            this.dgMainTable = new System.Windows.Forms.DataGrid();
             this.groupBox1 = new System.Windows.Forms.GroupBox();
             this.rbClients = new System.Windows.Forms.RadioButton();
             this.rbGroups = new System.Windows.Forms.RadioButton();
@@ -91,25 +91,48 @@
             this.panel6 = new System.Windows.Forms.Panel();
             this.dgIncome = new System.Windows.Forms.DataGrid();
             this.splitter3 = new System.Windows.Forms.Splitter();
-            this.dataGrid3 = new System.Windows.Forms.DataGrid();
+            this.dgOut = new System.Windows.Forms.DataGrid();
+            this.panel7 = new System.Windows.Forms.Panel();
+            this.sbMain = new System.Windows.Forms.StatusBar();
+            this.panel8 = new System.Windows.Forms.Panel();
+            this.tvManager = new System.Windows.Forms.TreeView();
+            this.splitter4 = new System.Windows.Forms.Splitter();
+            this.lvManager = new System.Windows.Forms.ListView();
+            this.panel9 = new System.Windows.Forms.Panel();
+            this.groupBox2 = new System.Windows.Forms.GroupBox();
+            this.cmbFilteringDirection = new System.Windows.Forms.ComboBox();
+            this.label8 = new System.Windows.Forms.Label();
+            this.txtOweToEdCenter = new System.Windows.Forms.TextBox();
+            this.txtEdCenterOwe = new System.Windows.Forms.TextBox();
+            this.label9 = new System.Windows.Forms.Label();
+            this.label10 = new System.Windows.Forms.Label();
+            this.btnCalculateOwe = new System.Windows.Forms.Button();
+            this.dgStatistic = new System.Windows.Forms.DataGrid();
             this.tcManager.SuspendLayout();
             this.tpWaitingRoom.SuspendLayout();
             this.tpBaseTables.SuspendLayout();
             this.tpPayment.SuspendLayout();
+            this.tpExplorer.SuspendLayout();
+            this.tpStatistic.SuspendLayout();
             this.tpWaitingRoomBottomPanel.SuspendLayout();
             this.panel1.SuspendLayout();
             this.panel2.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dgCourses)).BeginInit();
             this.panel3.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dgGroups)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.dataGrid1)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.dgClients)).BeginInit();
             this.panel4.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.dataGrid2)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.dgMainTable)).BeginInit();
             this.groupBox1.SuspendLayout();
             this.panel5.SuspendLayout();
             this.panel6.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dgIncome)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.dataGrid3)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.dgOut)).BeginInit();
+            this.panel7.SuspendLayout();
+            this.panel8.SuspendLayout();
+            this.panel9.SuspendLayout();
+            this.groupBox2.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.dgStatistic)).BeginInit();
             this.SuspendLayout();
             // 
             // tbMain
@@ -170,11 +193,11 @@
             // 
             // tpBaseTables
             // 
-            this.tpBaseTables.Controls.Add(this.dataGrid2);
+            this.tpBaseTables.Controls.Add(this.dgMainTable);
             this.tpBaseTables.Controls.Add(this.panel4);
             this.tpBaseTables.Location = new System.Drawing.Point(4, 22);
             this.tpBaseTables.Name = "tpBaseTables";
-            this.tpBaseTables.Size = new System.Drawing.Size(792, 396);
+            this.tpBaseTables.Size = new System.Drawing.Size(792, 392);
             this.tpBaseTables.TabIndex = 1;
             this.tpBaseTables.Text = "Основные таблицы";
             this.tpBaseTables.UseVisualStyleBackColor = true;
@@ -192,6 +215,8 @@
             // 
             // tpExplorer
             // 
+            this.tpExplorer.Controls.Add(this.panel8);
+            this.tpExplorer.Controls.Add(this.panel7);
             this.tpExplorer.Location = new System.Drawing.Point(4, 22);
             this.tpExplorer.Name = "tpExplorer";
             this.tpExplorer.Size = new System.Drawing.Size(792, 392);
@@ -201,9 +226,11 @@
             // 
             // tpStatistic
             // 
+            this.tpStatistic.Controls.Add(this.dgStatistic);
+            this.tpStatistic.Controls.Add(this.panel9);
             this.tpStatistic.Location = new System.Drawing.Point(4, 22);
             this.tpStatistic.Name = "tpStatistic";
-            this.tpStatistic.Size = new System.Drawing.Size(792, 396);
+            this.tpStatistic.Size = new System.Drawing.Size(792, 392);
             this.tpStatistic.TabIndex = 4;
             this.tpStatistic.Text = "Статистика";
             this.tpStatistic.UseVisualStyleBackColor = true;
@@ -360,7 +387,7 @@
             // 
             // panel3
             // 
-            this.panel3.Controls.Add(this.dataGrid1);
+            this.panel3.Controls.Add(this.dgClients);
             this.panel3.Controls.Add(this.splitter2);
             this.panel3.Controls.Add(this.dgGroups);
             this.panel3.Dock = System.Windows.Forms.DockStyle.Fill;
@@ -391,18 +418,18 @@
             this.splitter2.TabIndex = 2;
             this.splitter2.TabStop = false;
             // 
-            // dataGrid1
+            // dgClients
             // 
-            this.dataGrid1.CaptionBackColor = System.Drawing.SystemColors.ActiveBorder;
-            this.dataGrid1.CaptionFont = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
-            this.dataGrid1.CaptionText = "Клиенты";
-            this.dataGrid1.DataMember = "";
-            this.dataGrid1.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.dataGrid1.HeaderForeColor = System.Drawing.SystemColors.WindowText;
-            this.dataGrid1.Location = new System.Drawing.Point(0, 137);
-            this.dataGrid1.Name = "dataGrid1";
-            this.dataGrid1.Size = new System.Drawing.Size(659, 160);
-            this.dataGrid1.TabIndex = 3;
+            this.dgClients.CaptionBackColor = System.Drawing.SystemColors.ActiveBorder;
+            this.dgClients.CaptionFont = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
+            this.dgClients.CaptionText = "Клиенты";
+            this.dgClients.DataMember = "";
+            this.dgClients.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.dgClients.HeaderForeColor = System.Drawing.SystemColors.WindowText;
+            this.dgClients.Location = new System.Drawing.Point(0, 137);
+            this.dgClients.Name = "dgClients";
+            this.dgClients.Size = new System.Drawing.Size(659, 160);
+            this.dgClients.TabIndex = 3;
             // 
             // panel4
             // 
@@ -410,18 +437,18 @@
             this.panel4.Dock = System.Windows.Forms.DockStyle.Right;
             this.panel4.Location = new System.Drawing.Point(537, 0);
             this.panel4.Name = "panel4";
-            this.panel4.Size = new System.Drawing.Size(255, 396);
+            this.panel4.Size = new System.Drawing.Size(255, 392);
             this.panel4.TabIndex = 0;
             // 
-            // dataGrid2
+            // dgMainTable
             // 
-            this.dataGrid2.DataMember = "";
-            this.dataGrid2.Dock = System.Windows.Forms.DockStyle.Left;
-            this.dataGrid2.HeaderForeColor = System.Drawing.SystemColors.ControlText;
-            this.dataGrid2.Location = new System.Drawing.Point(0, 0);
-            this.dataGrid2.Name = "dataGrid2";
-            this.dataGrid2.Size = new System.Drawing.Size(531, 396);
-            this.dataGrid2.TabIndex = 1;
+            this.dgMainTable.DataMember = "";
+            this.dgMainTable.Dock = System.Windows.Forms.DockStyle.Left;
+            this.dgMainTable.HeaderForeColor = System.Drawing.SystemColors.ControlText;
+            this.dgMainTable.Location = new System.Drawing.Point(0, 0);
+            this.dgMainTable.Name = "dgMainTable";
+            this.dgMainTable.Size = new System.Drawing.Size(531, 392);
+            this.dgMainTable.TabIndex = 1;
             // 
             // groupBox1
             // 
@@ -750,7 +777,7 @@
             // 
             // panel6
             // 
-            this.panel6.Controls.Add(this.dataGrid3);
+            this.panel6.Controls.Add(this.dgOut);
             this.panel6.Controls.Add(this.splitter3);
             this.panel6.Controls.Add(this.dgIncome);
             this.panel6.Dock = System.Windows.Forms.DockStyle.Fill;
@@ -780,18 +807,175 @@
             this.splitter3.TabIndex = 1;
             this.splitter3.TabStop = false;
             // 
-            // dataGrid3
+            // dgOut
             // 
-            this.dataGrid3.CaptionFont = new System.Drawing.Font("Microsoft Sans Serif", 11F, System.Drawing.FontStyle.Bold);
-            this.dataGrid3.CaptionForeColor = System.Drawing.Color.Green;
-            this.dataGrid3.CaptionText = "Расход";
-            this.dataGrid3.DataMember = "";
-            this.dataGrid3.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.dataGrid3.HeaderForeColor = System.Drawing.SystemColors.ControlText;
-            this.dataGrid3.Location = new System.Drawing.Point(347, 0);
-            this.dataGrid3.Name = "dataGrid3";
-            this.dataGrid3.Size = new System.Drawing.Size(445, 307);
-            this.dataGrid3.TabIndex = 2;
+            this.dgOut.CaptionFont = new System.Drawing.Font("Microsoft Sans Serif", 11F, System.Drawing.FontStyle.Bold);
+            this.dgOut.CaptionForeColor = System.Drawing.Color.Green;
+            this.dgOut.CaptionText = "Расход";
+            this.dgOut.DataMember = "";
+            this.dgOut.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.dgOut.HeaderForeColor = System.Drawing.SystemColors.ControlText;
+            this.dgOut.Location = new System.Drawing.Point(347, 0);
+            this.dgOut.Name = "dgOut";
+            this.dgOut.Size = new System.Drawing.Size(445, 307);
+            this.dgOut.TabIndex = 2;
+            // 
+            // panel7
+            // 
+            this.panel7.Controls.Add(this.sbMain);
+            this.panel7.Dock = System.Windows.Forms.DockStyle.Bottom;
+            this.panel7.Location = new System.Drawing.Point(0, 368);
+            this.panel7.Name = "panel7";
+            this.panel7.Size = new System.Drawing.Size(792, 24);
+            this.panel7.TabIndex = 0;
+            // 
+            // sbMain
+            // 
+            this.sbMain.Location = new System.Drawing.Point(0, 2);
+            this.sbMain.Name = "sbMain";
+            this.sbMain.Size = new System.Drawing.Size(792, 22);
+            this.sbMain.TabIndex = 0;
+            this.sbMain.Text = "statusBar1";
+            // 
+            // panel8
+            // 
+            this.panel8.Controls.Add(this.lvManager);
+            this.panel8.Controls.Add(this.splitter4);
+            this.panel8.Controls.Add(this.tvManager);
+            this.panel8.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.panel8.Location = new System.Drawing.Point(0, 0);
+            this.panel8.Name = "panel8";
+            this.panel8.Size = new System.Drawing.Size(792, 368);
+            this.panel8.TabIndex = 1;
+            // 
+            // tvManager
+            // 
+            this.tvManager.Dock = System.Windows.Forms.DockStyle.Left;
+            this.tvManager.Location = new System.Drawing.Point(0, 0);
+            this.tvManager.Name = "tvManager";
+            this.tvManager.Size = new System.Drawing.Size(148, 368);
+            this.tvManager.TabIndex = 0;
+            this.tvManager.AfterSelect += new System.Windows.Forms.TreeViewEventHandler(this.tvManager_AfterSelect);
+            // 
+            // splitter4
+            // 
+            this.splitter4.Location = new System.Drawing.Point(148, 0);
+            this.splitter4.Name = "splitter4";
+            this.splitter4.Size = new System.Drawing.Size(3, 368);
+            this.splitter4.TabIndex = 1;
+            this.splitter4.TabStop = false;
+            // 
+            // lvManager
+            // 
+            this.lvManager.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.lvManager.HideSelection = false;
+            this.lvManager.Location = new System.Drawing.Point(151, 0);
+            this.lvManager.Name = "lvManager";
+            this.lvManager.Size = new System.Drawing.Size(641, 368);
+            this.lvManager.TabIndex = 2;
+            this.lvManager.UseCompatibleStateImageBehavior = false;
+            this.lvManager.Click += new System.EventHandler(this.lvManager_Click);
+            this.lvManager.DoubleClick += new System.EventHandler(this.lvManager_DoubleClick);
+            this.lvManager.MouseDown += new System.Windows.Forms.MouseEventHandler(this.lvManager_MouseDown);
+            // 
+            // panel9
+            // 
+            this.panel9.Controls.Add(this.groupBox2);
+            this.panel9.Dock = System.Windows.Forms.DockStyle.Top;
+            this.panel9.Location = new System.Drawing.Point(0, 0);
+            this.panel9.Name = "panel9";
+            this.panel9.Size = new System.Drawing.Size(792, 125);
+            this.panel9.TabIndex = 0;
+            // 
+            // groupBox2
+            // 
+            this.groupBox2.Controls.Add(this.btnCalculateOwe);
+            this.groupBox2.Controls.Add(this.label10);
+            this.groupBox2.Controls.Add(this.label9);
+            this.groupBox2.Controls.Add(this.txtEdCenterOwe);
+            this.groupBox2.Controls.Add(this.txtOweToEdCenter);
+            this.groupBox2.Controls.Add(this.label8);
+            this.groupBox2.Controls.Add(this.cmbFilteringDirection);
+            this.groupBox2.Location = new System.Drawing.Point(8, 13);
+            this.groupBox2.Name = "groupBox2";
+            this.groupBox2.Size = new System.Drawing.Size(776, 109);
+            this.groupBox2.TabIndex = 0;
+            this.groupBox2.TabStop = false;
+            this.groupBox2.Text = "Должники";
+            // 
+            // cmbFilteringDirection
+            // 
+            this.cmbFilteringDirection.FormattingEnabled = true;
+            this.cmbFilteringDirection.Location = new System.Drawing.Point(6, 40);
+            this.cmbFilteringDirection.Name = "cmbFilteringDirection";
+            this.cmbFilteringDirection.Size = new System.Drawing.Size(203, 21);
+            this.cmbFilteringDirection.TabIndex = 0;
+            this.cmbFilteringDirection.SelectionChangeCommitted += new System.EventHandler(this.cmbFilteringDirection_SelectionChangeCommitted);
+            // 
+            // label8
+            // 
+            this.label8.AutoSize = true;
+            this.label8.ForeColor = System.Drawing.Color.Green;
+            this.label8.Location = new System.Drawing.Point(6, 24);
+            this.label8.Name = "label8";
+            this.label8.Size = new System.Drawing.Size(75, 13);
+            this.label8.TabIndex = 9;
+            this.label8.Text = "Направление";
+            // 
+            // txtOweToEdCenter
+            // 
+            this.txtOweToEdCenter.Location = new System.Drawing.Point(392, 40);
+            this.txtOweToEdCenter.Name = "txtOweToEdCenter";
+            this.txtOweToEdCenter.Size = new System.Drawing.Size(215, 20);
+            this.txtOweToEdCenter.TabIndex = 10;
+            // 
+            // txtEdCenterOwe
+            // 
+            this.txtEdCenterOwe.Location = new System.Drawing.Point(392, 79);
+            this.txtEdCenterOwe.Name = "txtEdCenterOwe";
+            this.txtEdCenterOwe.Size = new System.Drawing.Size(215, 20);
+            this.txtEdCenterOwe.TabIndex = 11;
+            // 
+            // label9
+            // 
+            this.label9.AutoSize = true;
+            this.label9.ForeColor = System.Drawing.Color.Green;
+            this.label9.Location = new System.Drawing.Point(389, 24);
+            this.label9.Name = "label9";
+            this.label9.Size = new System.Drawing.Size(121, 13);
+            this.label9.TabIndex = 12;
+            this.label9.Text = "Должны учебн.центру:";
+            // 
+            // label10
+            // 
+            this.label10.AutoSize = true;
+            this.label10.ForeColor = System.Drawing.Color.DarkRed;
+            this.label10.Location = new System.Drawing.Point(389, 63);
+            this.label10.Name = "label10";
+            this.label10.Size = new System.Drawing.Size(119, 13);
+            this.label10.TabIndex = 13;
+            this.label10.Text = "Должен учебн.центру:";
+            // 
+            // btnCalculateOwe
+            // 
+            this.btnCalculateOwe.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.25F);
+            this.btnCalculateOwe.Location = new System.Drawing.Point(225, 37);
+            this.btnCalculateOwe.Name = "btnCalculateOwe";
+            this.btnCalculateOwe.Size = new System.Drawing.Size(75, 23);
+            this.btnCalculateOwe.TabIndex = 14;
+            this.btnCalculateOwe.Text = "Расчет";
+            this.btnCalculateOwe.UseVisualStyleBackColor = true;
+            this.btnCalculateOwe.Click += new System.EventHandler(this.btnCalculateOwe_Click);
+            // 
+            // dgStatistic
+            // 
+            this.dgStatistic.DataMember = "";
+            this.dgStatistic.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.dgStatistic.HeaderForeColor = System.Drawing.SystemColors.ControlText;
+            this.dgStatistic.Location = new System.Drawing.Point(0, 125);
+            this.dgStatistic.Name = "dgStatistic";
+            this.dgStatistic.Size = new System.Drawing.Size(792, 267);
+            this.dgStatistic.TabIndex = 1;
             // 
             // Manager
             // 
@@ -806,6 +990,8 @@
             this.tpWaitingRoom.ResumeLayout(false);
             this.tpBaseTables.ResumeLayout(false);
             this.tpPayment.ResumeLayout(false);
+            this.tpExplorer.ResumeLayout(false);
+            this.tpStatistic.ResumeLayout(false);
             this.tpWaitingRoomBottomPanel.ResumeLayout(false);
             this.panel1.ResumeLayout(false);
             this.panel1.PerformLayout();
@@ -813,16 +999,22 @@
             ((System.ComponentModel.ISupportInitialize)(this.dgCourses)).EndInit();
             this.panel3.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.dgGroups)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.dataGrid1)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.dgClients)).EndInit();
             this.panel4.ResumeLayout(false);
-            ((System.ComponentModel.ISupportInitialize)(this.dataGrid2)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.dgMainTable)).EndInit();
             this.groupBox1.ResumeLayout(false);
             this.groupBox1.PerformLayout();
             this.panel5.ResumeLayout(false);
             this.panel5.PerformLayout();
             this.panel6.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.dgIncome)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.dataGrid3)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.dgOut)).EndInit();
+            this.panel7.ResumeLayout(false);
+            this.panel8.ResumeLayout(false);
+            this.panel9.ResumeLayout(false);
+            this.groupBox2.ResumeLayout(false);
+            this.groupBox2.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.dgStatistic)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -853,12 +1045,12 @@
         private System.Windows.Forms.Button btnShowGroups;
         private System.Windows.Forms.Panel panel2;
         private System.Windows.Forms.Panel panel3;
-        private System.Windows.Forms.DataGrid dataGrid1;
+        private System.Windows.Forms.DataGrid dgClients;
         private System.Windows.Forms.Splitter splitter2;
         private System.Windows.Forms.DataGrid dgGroups;
         private System.Windows.Forms.Splitter splitter1;
         private System.Windows.Forms.DataGrid dgCourses;
-        private System.Windows.Forms.DataGrid dataGrid2;
+        private System.Windows.Forms.DataGrid dgMainTable;
         private System.Windows.Forms.Panel panel4;
         private System.Windows.Forms.GroupBox groupBox1;
         private System.Windows.Forms.RadioButton rbDataMain;
@@ -890,7 +1082,23 @@
         private System.Windows.Forms.Button btnPrevDate;
         private System.Windows.Forms.Panel panel6;
         private System.Windows.Forms.DataGrid dgIncome;
-        private System.Windows.Forms.DataGrid dataGrid3;
+        private System.Windows.Forms.DataGrid dgOut;
         private System.Windows.Forms.Splitter splitter3;
+        private System.Windows.Forms.Panel panel8;
+        private System.Windows.Forms.ListView lvManager;
+        private System.Windows.Forms.Splitter splitter4;
+        private System.Windows.Forms.TreeView tvManager;
+        private System.Windows.Forms.Panel panel7;
+        private System.Windows.Forms.StatusBar sbMain;
+        private System.Windows.Forms.Panel panel9;
+        private System.Windows.Forms.GroupBox groupBox2;
+        private System.Windows.Forms.ComboBox cmbFilteringDirection;
+        private System.Windows.Forms.Label label8;
+        private System.Windows.Forms.Button btnCalculateOwe;
+        private System.Windows.Forms.Label label10;
+        private System.Windows.Forms.Label label9;
+        private System.Windows.Forms.TextBox txtEdCenterOwe;
+        private System.Windows.Forms.TextBox txtOweToEdCenter;
+        private System.Windows.Forms.DataGrid dgStatistic;
     }
 }

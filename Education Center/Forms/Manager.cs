@@ -150,5 +150,35 @@ namespace Education_Center.Forms
         {
 
         }
+
+        private void tvManager_AfterSelect(object sender, TreeViewEventArgs e)
+        {
+
+        }
+
+        private void lvManager_MouseDown(object sender, MouseEventArgs e)
+        {
+
+        }
+
+        private void lvManager_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void lvManager_DoubleClick(object sender, EventArgs e)
+        {
+
+        }
+
+        private void cmbFilteringDirection_SelectionChangeCommitted(object sender, EventArgs e)
+        {
+            btnCalculateOwe.Enabled = true;
+        }
+
+        private void btnCalculateOwe_Click(object sender, EventArgs e)
+        {
+            //this.GetOweStatistic();
+        }
     }
 }

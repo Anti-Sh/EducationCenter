@@ -10,16 +10,11 @@ using System.Windows.Forms;
 
 namespace Education_Center.Forms
 {
-    public partial class Group : Form
+    public partial class PaymentType : Form
     {
-        public Group()
+        public PaymentType()
         {
             InitializeComponent();
-        }
-
-        private void Group_Load(object sender, EventArgs e)
-        {
-            txtNotes.Focus();
         }
     }
 }

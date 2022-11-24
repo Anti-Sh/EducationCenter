@@ -1,4 +1,6 @@
-﻿using System.Collections.Generic;
+﻿using System.Collections;
+using System.Collections.Generic;
+using System.Data;
 using MySql.Data.MySqlClient;
 
 namespace Education_Center.Classes
@@ -9,7 +11,7 @@ namespace Education_Center.Classes
         static MySqlConnection myConnection; // Объявление переменной подключения - статического поля класса 
         static string SQLServerName = "localhost"; // ip хоста MySqlServer
         static int port = 3306; // порт MySqlServer
-        static string dataBase = "forum"; // Название БД
+        static string dataBase = "education_center"; // Название БД
         static string username = "root"; // Имя пользователя
         static string password = ""; // Пароль
         public static void OpenConnection() // Статический метод, открывающий соединение с БД
@@ -59,6 +61,24 @@ namespace Education_Center.Classes
         public static void CloseConnection() // Закрытие соединения с БД
         {
             myConnection.Close();
+        }
+        public static DataTable GetDataBase(string name)
+        {
+            OpenConnection();
+            string query = $"SELECT * FROM `{name}`";
+            MySqlDataAdapter returnVal = new MySqlDataAdapter(query, myConnection);
+            DataTable dt = new DataTable(name);
+            returnVal.Fill(dt);
+            CloseConnection();
+            return dt;
+        }
+        
+        public static DataTable GetDataBaseQuery(string query)
+        {
+            MySqlDataAdapter returnVal = new MySqlDataAdapter(query, myConnection);
+            DataTable dt = new DataTable();
+            returnVal.Fill(dt);
+            return dt;
         }
     }
 }

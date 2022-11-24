@@ -99,11 +99,53 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Classes\MySQL.cs" />
     <Compile Include="Form1.cs">
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="Form1.Designer.cs">
       <DependentUpon>Form1.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Forms\Client.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\Client.Designer.cs">
+      <DependentUpon>Client.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Forms\ClientTransfer.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\ClientTransfer.Designer.cs">
+      <DependentUpon>ClientTransfer.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Forms\Course.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\Course.Designer.cs">
+      <DependentUpon>Course.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Forms\Direction.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\Direction.Designer.cs">
+      <DependentUpon>Direction.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Forms\Employee.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\Employee.Designer.cs">
+      <DependentUpon>Employee.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Forms\Group.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\Group.Designer.cs">
+      <DependentUpon>Group.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Forms\MainDataSet.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>MainDataSet.xsd</DependentUpon>
     </Compile>
     <Compile Include="Forms\Manager.cs">
       <SubType>Form</SubType>
@@ -111,13 +153,49 @@
     <Compile Include="Forms\Manager.Designer.cs">
       <DependentUpon>Manager.cs</DependentUpon>
     </Compile>
+    <Compile Include="Forms\PaymentType.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\PaymentType.Designer.cs">
+      <DependentUpon>PaymentType.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Forms\SearchClient.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\SearchClient.Designer.cs">
+      <DependentUpon>SearchClient.cs</DependentUpon>
+    </Compile>
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <EmbeddedResource Include="Form1.resx">
       <DependentUpon>Form1.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="Forms\Client.resx">
+      <DependentUpon>Client.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\ClientTransfer.resx">
+      <DependentUpon>ClientTransfer.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\Course.resx">
+      <DependentUpon>Course.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\Direction.resx">
+      <DependentUpon>Direction.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\Employee.resx">
+      <DependentUpon>Employee.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\Group.resx">
+      <DependentUpon>Group.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Forms\Manager.resx">
       <DependentUpon>Manager.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\PaymentType.resx">
+      <DependentUpon>PaymentType.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\SearchClient.resx">
+      <DependentUpon>SearchClient.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>
@@ -128,6 +206,17 @@
       <AutoGen>True</AutoGen>
       <DependentUpon>Resources.resx</DependentUpon>
     </Compile>
+    <None Include="Forms\MainDataSet.xsc">
+      <DependentUpon>MainDataSet.xsd</DependentUpon>
+    </None>
+    <None Include="Forms\MainDataSet.xsd">
+      <SubType>Designer</SubType>
+      <Generator>MSDataSetGenerator</Generator>
+      <LastGenOutput>MainDataSet.Designer.cs</LastGenOutput>
+    </None>
+    <None Include="Forms\MainDataSet.xss">
+      <DependentUpon>MainDataSet.xsd</DependentUpon>
+    </None>
     <None Include="packages.config" />
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>

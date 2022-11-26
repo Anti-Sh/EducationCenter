@@ -28,12 +28,16 @@
         /// </summary>
         private void InitializeComponent()
         {
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle1 = new System.Windows.Forms.DataGridViewCellStyle();
             this.panel1 = new System.Windows.Forms.Panel();
             this.btnCancel = new System.Windows.Forms.Button();
             this.btnOK = new System.Windows.Forms.Button();
-            this.dqPaymentType = new System.Windows.Forms.DataGrid();
+            this.dgPaymentType = new System.Windows.Forms.DataGridView();
+            this.payment_typeID = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.payment_typeName = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.note = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.panel1.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.dqPaymentType)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.dgPaymentType)).BeginInit();
             this.SuspendLayout();
             // 
             // panel1
@@ -67,34 +71,62 @@
             this.btnOK.TabIndex = 6;
             this.btnOK.Text = "OK";
             this.btnOK.UseVisualStyleBackColor = true;
+            this.btnOK.Click += new System.EventHandler(this.btnOK_Click);
             // 
-            // dqPaymentType
+            // dgPaymentType
             // 
-            this.dqPaymentType.CaptionBackColor = System.Drawing.Color.DarkGreen;
-            this.dqPaymentType.CaptionFont = new System.Drawing.Font("Microsoft Sans Serif", 10.25F, System.Drawing.FontStyle.Bold);
-            this.dqPaymentType.CaptionForeColor = System.Drawing.SystemColors.ControlLightLight;
-            this.dqPaymentType.CaptionText = "Виды оплат";
-            this.dqPaymentType.DataMember = "";
-            this.dqPaymentType.Dock = System.Windows.Forms.DockStyle.Top;
-            this.dqPaymentType.HeaderForeColor = System.Drawing.SystemColors.ControlText;
-            this.dqPaymentType.Location = new System.Drawing.Point(0, 0);
-            this.dqPaymentType.Name = "dqPaymentType";
-            this.dqPaymentType.Size = new System.Drawing.Size(624, 252);
-            this.dqPaymentType.TabIndex = 22;
-            this.dqPaymentType.CurrentCellChanged += new System.EventHandler(this.dqPaymentType_CurrentCellChanged);
-            this.dqPaymentType.Click += new System.EventHandler(this.dqPaymentType_Click);
+            this.dgPaymentType.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            this.dgPaymentType.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
+            this.payment_typeID,
+            this.payment_typeName,
+            this.note});
+            this.dgPaymentType.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.dgPaymentType.Location = new System.Drawing.Point(0, 0);
+            this.dgPaymentType.Name = "dgPaymentType";
+            this.dgPaymentType.Size = new System.Drawing.Size(624, 252);
+            this.dgPaymentType.TabIndex = 22;
+            this.dgPaymentType.DefaultValuesNeeded += new System.Windows.Forms.DataGridViewRowEventHandler(this.dgPaymentType_DefaultValuesNeeded);
+            this.dgPaymentType.RowValidating += new System.Windows.Forms.DataGridViewCellCancelEventHandler(this.dgPaymentType_RowValidating);
+            this.dgPaymentType.UserAddedRow += new System.Windows.Forms.DataGridViewRowEventHandler(this.dgPaymentType_UserAddedRow);
+            // 
+            // payment_typeID
+            // 
+            this.payment_typeID.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.AllCells;
+            dataGridViewCellStyle1.Format = "N0";
+            dataGridViewCellStyle1.NullValue = null;
+            this.payment_typeID.DefaultCellStyle = dataGridViewCellStyle1;
+            this.payment_typeID.HeaderText = "ID";
+            this.payment_typeID.Name = "payment_typeID";
+            this.payment_typeID.ReadOnly = true;
+            this.payment_typeID.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
+            this.payment_typeID.Width = 24;
+            // 
+            // payment_typeName
+            // 
+            this.payment_typeName.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.Fill;
+            this.payment_typeName.HeaderText = "Name";
+            this.payment_typeName.Name = "payment_typeName";
+            this.payment_typeName.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
+            // 
+            // note
+            // 
+            this.note.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.AllCells;
+            this.note.HeaderText = "Note";
+            this.note.Name = "note";
+            this.note.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
+            this.note.Width = 36;
             // 
             // PaymentType
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(624, 286);
-            this.Controls.Add(this.dqPaymentType);
+            this.Controls.Add(this.dgPaymentType);
             this.Controls.Add(this.panel1);
             this.Name = "PaymentType";
             this.Text = "PaymentType";
             this.panel1.ResumeLayout(false);
-            ((System.ComponentModel.ISupportInitialize)(this.dqPaymentType)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.dgPaymentType)).EndInit();
             this.ResumeLayout(false);
 
         }
@@ -104,6 +136,9 @@
         private System.Windows.Forms.Panel panel1;
         private System.Windows.Forms.Button btnCancel;
         private System.Windows.Forms.Button btnOK;
-        private System.Windows.Forms.DataGrid dqPaymentType;
+        private System.Windows.Forms.DataGridView dgPaymentType;
+        private System.Windows.Forms.DataGridViewTextBoxColumn payment_typeID;
+        private System.Windows.Forms.DataGridViewTextBoxColumn payment_typeName;
+        private System.Windows.Forms.DataGridViewTextBoxColumn note;
     }
 }

@@ -13,66 +13,77 @@ namespace Education_Center.Forms
 {
     public partial class PaymentType : Form
     {
-        private DataRow selectedRow = null;
-        public DataRow SelectedRow
-        {
-            get { return selectedRow; }
-            set { selectedRow = value; }
-        }
+        public string[][] paymentTypes;
         public PaymentType()
         {
             InitializeComponent();
-            DesignDataGrid();
-            dqPaymentType.DataSource = MySQL.GetDataBase("payment_type");
+            var list = MySQL.ExecuteQuery("SELECT * FROM payment_type", 3);
+            dgPaymentType.Rows.Clear();
+            if (list != null)
+                foreach(string[] l in list)
+                {
+                    dgPaymentType.Rows.Add(l);
+                }
+            else
+                dgPaymentType.Rows.Add(new string[]{ "1",null, null});
+
         }
 
-        private void dqPaymentType_Click(object sender, EventArgs e)
+        private void dgPaymentType_UserAddedRow(object sender, DataGridViewRowEventArgs e)
         {
-            if ((dqPaymentType.CurrentCell.RowNumber != -1) && (dqPaymentType.CurrentCell.ColumnNumber != -1))
-                dqPaymentType_CurrentCellChanged(dqPaymentType, new EventArgs());
-        }
-
-        private void dqPaymentType_CurrentCellChanged(object sender, EventArgs e)
-        {
-            try
+            /*if (dgPaymentType.Rows.Count > 0)
             {
-                //this.SelectedRow = mainDataSet.payment_type.Rows[dqPaymentType.CurrentRowIndex];
-                var test = dqPaymentType.CurrentRowIndex;
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show(ex.Message, ex.Source);
-            }
+                if (dgPaymentType.Rows[dgPaymentType.Rows.Count - 2].Cells[1] == null || dgPaymentType.Rows[dgPaymentType.Rows.Count - 2].Cells[2] == null)
+                {
+                    dgPaymentType.Rows.RemoveAt(dgPaymentType.Rows.Count - 1);
+                    return;
+                }
+                string queryResult = MySQL.ExecuteQuery("SELECT MAX(`payment_typeID`) FROM `payment_type`") != "" ? MySQL.ExecuteQuery("SELECT MAX(`payment_typeID`) FROM `payment_type`") : "0";
+
+                int nextID = Convert.ToInt32(queryResult) + dgPaymentType.Rows.Count;
+                dgPaymentType[0, dgPaymentType.Rows.Count - 1].Value = nextID;
+
+                //dgPaymentType.Rows[dgPaymentType.Rows.Count - 1] = nextID;
+
+            }*/
         }
-        private void DesignDataGrid()
+
+        private void dgPaymentType_RowValidating(object sender, DataGridViewCellCancelEventArgs e)
         {
-            // Дизайн таблицы payment_type
-            DataGridTableStyle paymentTypeStyle = new DataGridTableStyle();
-            paymentTypeStyle.MappingName = "payment_type";
+            if( dgPaymentType.Rows[e.RowIndex].Cells[1].Value == null  || dgPaymentType.Rows[e.RowIndex].Cells[1].Value.ToString() == "") {
+                dgPaymentType.Rows[e.RowIndex].Cells[1].ErrorText = "Заполните ячейку!";
+                dgPaymentType.AllowUserToAddRows = false;
+                return;
+            }
+            dgPaymentType.Rows[e.RowIndex].Cells[1].ErrorText = null;
+            dgPaymentType.AllowUserToAddRows = true;
 
-            DataGridTextBoxColumn paymentTypeIDStyle = new DataGridTextBoxColumn();
-            paymentTypeIDStyle.MappingName = "payment_typeID";
-            paymentTypeIDStyle.Width = 50;
-            paymentTypeIDStyle.HeaderText = "ID";
+        }
 
+        private void dgPaymentType_DefaultValuesNeeded(object sender, DataGridViewRowEventArgs e)
+        {
+            e.Row.Cells[0].Value = NewPaymentTypeID();
+        }
+        private int NewPaymentTypeID() => Convert.ToInt32(dgPaymentType.Rows[dgPaymentType.Rows.Count - 2].Cells[0].Value) + 1;
 
-            DataGridTextBoxColumn paymentTypeNameStyle = new DataGridTextBoxColumn();
-            paymentTypeNameStyle.MappingName = "payment_typeName";
-            paymentTypeNameStyle.Width = 100;
-            paymentTypeNameStyle.HeaderText = "Name";
+        private void btnOK_Click(object sender, EventArgs e)
+        {
+            paymentTypes = new string[dgPaymentType.Rows.Count][];
+            int counter = 0;
+            foreach (DataGridViewRow row in dgPaymentType.Rows)
+            {
+                if (row.IsNewRow)
+                    break;
+                paymentTypes[counter] = new string[row.Cells.Count];
+                paymentTypes[counter][0] = row.Cells[0].Value.ToString();
+                paymentTypes[counter][1] = row.Cells[1].Value.ToString();
+                paymentTypes[counter][2] = row.Cells[2].Value != null ? paymentTypes[counter][2] = row.Cells[2].Value.ToString() : "";
+                if (row.Cells[2].Value != null)
+                    paymentTypes[counter][2] = row.Cells[2].Value.ToString();
+                else
 
-
-            DataGridTextBoxColumn paymentTypeNoteStyle = new DataGridTextBoxColumn();
-            paymentTypeNoteStyle.MappingName = "note";
-            paymentTypeNoteStyle.Width = 200;
-            paymentTypeNoteStyle.HeaderText = "Notes";
-
-            paymentTypeStyle.GridColumnStyles.AddRange(new DataGridTextBoxColumn[] {
-                                                                                        paymentTypeIDStyle,
-                                                                                        paymentTypeNameStyle,
-                                                                                        paymentTypeNoteStyle});
-
-            dqPaymentType.TableStyles.Add(paymentTypeStyle);
+                counter++;
+            }
         }
     }
 }

@@ -305,8 +305,24 @@ namespace Education_Center.Forms
         private void btnShowPaymentTypeForm_Click(object sender, EventArgs e)
         {
             PaymentType fpt = new PaymentType();
-
-            fpt.ShowDialog();
+            string query;
+            if(fpt.ShowDialog() == DialogResult.OK)
+            {
+                foreach (string[] type in fpt.paymentTypes)
+                {
+                    if (type == null)
+                        continue;
+                    
+                    int count = Convert.ToInt32(MySQL.ExecuteQuery($"SELECT COUNT(*) FROM `payment_type` WHERE `payment_typeID`='{type[0]}'"));
+                    query = $"INSERT INTO `payment_type`(`payment_typeID`, `payment_typeName`, `note`) VALUES (NULL,'{type[1]}','{type[2]}')";
+                    if (count > 0)
+                    {
+                        query = $"UPDATE `payment_type` SET `payment_typeName`='{type[1]}',`note`='{type[2]}' WHERE `payment_typeID`='{type[0]}'";
+                    }
+                    MySQL.ExecuteQueryWithoutResponse(query);
+                }
+                isEdited= true;
+            }
         }
 
         private void tvManager_AfterSelect(object sender, TreeViewEventArgs e)

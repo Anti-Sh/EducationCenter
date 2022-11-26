@@ -10,6 +10,7 @@ using System.Threading.Tasks;
 using System.Windows.Forms;
 using Education_Center.Classes;
 using System.Xml.Linq;
+using System.Data.SqlTypes;
 
 namespace Education_Center.Forms
 {
@@ -90,6 +91,7 @@ namespace Education_Center.Forms
             DesigneDataGrids();
             MySQL.OpenConnection();
             FillOnLoad();
+            FillPaymentsPage();
             MySQL.ExecuteQueryWithoutResponse("set autocommit=0;start transaction;");
             Closing += new CancelEventHandler(Manager_Closing);
         }
@@ -238,17 +240,73 @@ namespace Education_Center.Forms
 
         private void btnNextDate_Click(object sender, EventArgs e)
         {
+            int dataID = 0;
+            selectedDataNum += 1;
+            FillPaymentsPage();
+            /*DataTable data = MySQL.GetDataBase("data");
+            if (currManagerTotal.Position < data.Rows.Count)
+            {
+                currManagerTotal.Position += 1;
+                DataRowView drvDataRow = (DataRowView)currManagerTotal.Current;
+                dataID = (int)drvDataRow.Row["dataID"];
+                DateTime date = (DateTime)drvDataRow.Row["currentDate"];
+                lblDateTime.Text = date.ToString("dd MMMM yyyy");
+            }
 
+            ///////////////////////
+            DataRowView drvData = (DataRowView)currManagerTotal.Current;
+            CalculateTotalPage(drvData.Row);
+            ///////////////////////
+
+            currentDataID = dataID;
+            switch (userGroup)
+            {
+                case frmAuthorization.UserGroup.PManagers:
+                    if (dataID == DataID)
+                        dgIncome.ReadOnly = false;
+                    else
+                        dgIncome.ReadOnly = true;
+                    break;
+            }*/
         }
 
         private void btnPrevDate_Click(object sender, EventArgs e)
         {
+            int dataID = 0;
+            selectedDataNum -= 1;
+            FillPaymentsPage();
+           /* if (currManagerTotal.Position > 0)
+            {
+                currManagerTotal.Position -= 1;
+                DataRowView drvDataRow = (DataRowView)currManagerTotal.Current;
+                dataID = (int)drvDataRow.Row["dataID"];
+                DateTime date = (DateTime)drvDataRow.Row["currentDate"];
+                lblDateTime.Text = date.ToString("dd MMMM yyyy");
+            }
 
+            ///////////////////////
+            DataRowView drvData = (DataRowView)currManagerTotal.Current;
+            CalculateTotalPage(drvData.Row);
+            ///////////////////////
+
+
+            currentDataID = dataID;*/
+            /*switch (userGroup)
+            {
+                case frmAuthorization.UserGroup.PManagers:
+                    if (dataID == DataID)
+                        dgIncome.ReadOnly = false;
+                    else
+                        dgIncome.ReadOnly = true;
+                    break;
+            }*/
         }
 
         private void btnShowPaymentTypeForm_Click(object sender, EventArgs e)
         {
+            PaymentType fpt = new PaymentType();
 
+            fpt.ShowDialog();
         }
 
         private void tvManager_AfterSelect(object sender, TreeViewEventArgs e)
@@ -1352,6 +1410,107 @@ namespace Education_Center.Forms
                     if (hti.Row <= table.Rows.Count - 1)
                         btnDeleteClient.Tag = table.Rows[hti.Row]["clientID"];
                 }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message, ex.Source);
+            }
+        }
+        // Итоговые расчеты на текущую запись в таблице data
+        private void CalculateTotalPage(DataRow currentTotalRow)
+        {
+            double resultIncome = 0;
+            double resultOut = 0;
+            double balance = 0;
+
+            int dataID = (int)currentTotalRow[0];
+
+            DataRow[] incomeRows = currentTotalRow.GetChildRows("dataincome");
+            DataRow[] outRows = currentTotalRow.GetChildRows("dataexpenses");
+
+            // Определение прихода
+            foreach (DataRow dr in incomeRows)
+            {
+                if (dr[3] == null)
+                    continue;
+
+                resultIncome += (double)dr[3];
+            }
+            txtResultIncome.Text = resultIncome.ToString("c");
+
+            // Определение расхода
+            foreach (DataRow dr in outRows)
+            {
+                if (dr[3] == null)
+                    continue;
+
+                resultOut += (double)dr[3];
+            }
+            txtResultOut.Text = resultOut.ToString("c");
+
+            // Баланс
+            balance = resultIncome - resultOut;
+            txtBalance.Text = balance.ToString("c");
+
+            // Итоговые расчеты
+            double yesterdaySumm = Convert.ToDouble(currentTotalRow[2]);
+            txtYesterdaySumm.Text = yesterdaySumm.ToString("c");
+
+            double total = yesterdaySumm + balance;
+            txtResultCount.Text = total.ToString("c");
+
+            currentTotalRow["incomeToday"] = (double)resultIncome;      // Приход на сегодня
+            currentTotalRow["expanseToday"] = (double)resultOut;            // Расход на сегодня
+            currentTotalRow["amountToday"] = yesterdaySumm + balance; // Итог на сегодня. Ко вчерашней сумме прибавляем баланс на сегодня
+        }
+
+        int selectedDataNum = 0;
+        int selectedData = 0;
+        internal void FillPaymentsPage()
+        {
+            try
+            {
+                var income = MySQL.GetDataBase("income");
+                var expenses = MySQL.GetDataBase("expenses");
+                var data = MySQL.GetDataBase("data");
+
+                if(selectedData == 0)
+                {
+                    selectedData = (int)data.Rows[data.Rows.Count - 1]["dataID"];
+                    selectedDataNum = data.Rows.Count;
+                }
+
+                int lastDataNum = data.Rows.Count;
+                if (lastDataNum < selectedDataNum) 
+                {
+                    selectedDataNum = 1;
+                    selectedData = (int)data.Rows[selectedDataNum - 1]["dataID"];
+                }
+                else if(selectedDataNum <= 0)
+                {
+                    selectedDataNum = lastDataNum;
+                    selectedData = (int)data.Rows[selectedDataNum - 1]["dataID"];
+                }
+              
+                if (income.Rows.Count != 0)
+                {
+                    DataView dvIncome = new DataView(income);
+                    dvIncome.RowFilter = $"dataID={selectedData}";
+                    dgIncome.DataSource = dvIncome;
+                }
+                
+                if (expenses.Rows.Count != 0)
+                {
+                    DataView dvOut = new DataView(expenses);
+                    dvOut.RowFilter = $"dataID={selectedData}";
+                    dgOut.DataSource = dgOut;
+                }
+
+                lblDateTime.Text = MySQL.ExecuteQuery($"SELECT currentDate FROM data WHERE dataID={selectedData}").Split(' ')[0];
+                txtYesterdaySumm.Text = MySQL.ExecuteQuery($"SELECT `amountYesterday` FROM `data` WHERE dataID={selectedData};");
+                txtResultCount.Text = MySQL.ExecuteQuery($"SELECT `amountToday` FROM `data` WHERE dataID={selectedData};");
+                 
+
             }
             catch (Exception ex)
             {

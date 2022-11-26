@@ -108,6 +108,7 @@
             this.txtOweToEdCenter = new System.Windows.Forms.TextBox();
             this.label8 = new System.Windows.Forms.Label();
             this.cmbFilteringDirection = new System.Windows.Forms.ComboBox();
+            this.lblDateTime = new System.Windows.Forms.Label();
             this.tcManager.SuspendLayout();
             this.tpWaitingRoom.SuspendLayout();
             this.panel2.SuspendLayout();
@@ -652,6 +653,7 @@
             // 
             // panel5
             // 
+            this.panel5.Controls.Add(this.lblDateTime);
             this.panel5.Controls.Add(this.btnShowPaymentTypeForm);
             this.panel5.Controls.Add(this.btnNextDate);
             this.panel5.Controls.Add(this.btnPrevDate);
@@ -982,6 +984,14 @@
             this.cmbFilteringDirection.TabIndex = 0;
             this.cmbFilteringDirection.SelectionChangeCommitted += new System.EventHandler(this.cmbFilteringDirection_SelectionChangeCommitted);
             // 
+            // lblDateTime
+            // 
+            this.lblDateTime.AutoSize = true;
+            this.lblDateTime.Location = new System.Drawing.Point(674, 49);
+            this.lblDateTime.Name = "lblDateTime";
+            this.lblDateTime.Size = new System.Drawing.Size(0, 13);
+            this.lblDateTime.TabIndex = 14;
+            // 
             // Manager
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -1105,5 +1115,6 @@
         private System.Windows.Forms.TextBox txtEdCenterOwe;
         private System.Windows.Forms.TextBox txtOweToEdCenter;
         private System.Windows.Forms.DataGrid dgStatistic;
+        private System.Windows.Forms.Label lblDateTime;
     }
 }

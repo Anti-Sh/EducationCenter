@@ -48,6 +48,7 @@
             // 
             // btnCancel
             // 
+            this.btnCancel.DialogResult = System.Windows.Forms.DialogResult.Cancel;
             this.btnCancel.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F);
             this.btnCancel.Location = new System.Drawing.Point(537, 6);
             this.btnCancel.Name = "btnCancel";
@@ -58,12 +59,13 @@
             // 
             // btnOK
             // 
+            this.btnOK.DialogResult = System.Windows.Forms.DialogResult.OK;
             this.btnOK.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F);
             this.btnOK.Location = new System.Drawing.Point(453, 6);
             this.btnOK.Name = "btnOK";
             this.btnOK.Size = new System.Drawing.Size(75, 22);
             this.btnOK.TabIndex = 6;
-            this.btnOK.Text = "Создать";
+            this.btnOK.Text = "OK";
             this.btnOK.UseVisualStyleBackColor = true;
             // 
             // dqPaymentType
@@ -79,6 +81,8 @@
             this.dqPaymentType.Name = "dqPaymentType";
             this.dqPaymentType.Size = new System.Drawing.Size(624, 252);
             this.dqPaymentType.TabIndex = 22;
+            this.dqPaymentType.CurrentCellChanged += new System.EventHandler(this.dqPaymentType_CurrentCellChanged);
+            this.dqPaymentType.Click += new System.EventHandler(this.dqPaymentType_Click);
             // 
             // PaymentType
             // 

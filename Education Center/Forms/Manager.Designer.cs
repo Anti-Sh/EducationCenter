@@ -233,6 +233,7 @@
             this.dgClients.Name = "dgClients";
             this.dgClients.Size = new System.Drawing.Size(659, 160);
             this.dgClients.TabIndex = 3;
+            this.dgClients.MouseUp += new System.Windows.Forms.MouseEventHandler(this.dgClients_MouseUp);
             // 
             // splitter2
             // 
@@ -1051,7 +1052,7 @@
         private System.Windows.Forms.Panel panel3;
         private System.Windows.Forms.DataGrid dgClients;
         private System.Windows.Forms.Splitter splitter2;
-        private System.Windows.Forms.DataGrid dgGroups;
+        public System.Windows.Forms.DataGrid dgGroups;
         private System.Windows.Forms.Splitter splitter1;
         private System.Windows.Forms.DataGrid dgCourses;
         private System.Windows.Forms.DataGrid dgMainTable;

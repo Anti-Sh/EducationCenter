@@ -9,6 +9,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using Education_Center.Classes;
+using System.Xml.Linq;
 
 namespace Education_Center.Forms
 {
@@ -22,7 +23,7 @@ namespace Education_Center.Forms
         #endregion
         #region Атрибуты
 
-        Dictionary<string, string> rbs = new Dictionary<string, string> 
+        Dictionary<string, string> rbs = new Dictionary<string, string>
         {
             { "Клиенты", "clients" },
             { "Группы", "groups" },
@@ -36,12 +37,22 @@ namespace Education_Center.Forms
             { "Виды оплат", "payment_type" },
             { "Данные", "data" },
         };
-        bool isEdited = false;
-
+        private bool isEdited = false;
+        public bool IsEdited
+        {
+            get { return isEdited; }
+            set { isEdited = value; }
+        }
+        
         #endregion
 
         #region Глобальные поля
-
+        static private int dataID = 0;
+        static internal int DataID
+        {
+            get { return dataID; }
+            set { dataID = value; }
+        }
         private int currentDataID;
         private DataTable dtWorkTable; // для записи в файл XML
 
@@ -138,8 +149,7 @@ namespace Education_Center.Forms
                 int groupID = (int)btnDeleteGroup.Tag;
                 MySQL.ExecuteQueryWithoutResponse($"DELETE FROM `groups` WHERE `groupID`='{groupID}'");
                 
-                dgCourses_Click(dgCourses, e);
-
+                dgCourses_Click(dgCourses, new EventArgs());
 
                 btnDeleteGroup.Enabled = false;
                 isEdited= true;
@@ -152,7 +162,7 @@ namespace Education_Center.Forms
 
         private void btnCreateClient_Click(object sender, EventArgs e)
         {
-            //this.AddNewClientWaitingRoom();
+            this.AddNewClientWaitingRoom();
         }
 
         private void btnDeleteClient_Click(object sender, EventArgs e)
@@ -171,6 +181,7 @@ namespace Education_Center.Forms
                 btnDeleteClient.Enabled = false;
 
                 dgGroups_Click(dgGroups, new EventArgs());
+                isEdited= true;
             }
             catch (Exception ex)
             {
@@ -1255,6 +1266,91 @@ namespace Education_Center.Forms
                     {
                         MessageBox.Show(ex.Message, ex.Source);
                     }
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message, ex.Source);
+            }
+        }
+        // Добавление нового клиента со страницы 'Приемная'
+        private void AddNewClientWaitingRoom()
+        {
+            Client f = new Client();
+
+            int groupRowID = dgGroups.CurrentRowIndex;
+            DataView dvGroups = (DataView)dgGroups.DataSource;
+            DataRow group = dvGroups[groupRowID].Row;
+            f.Text += group["groupID"].ToString();
+            f.lblClientID.Text = "Новый клиент";
+            string query = "INSERT INTO `clients`(`clientID`, `fname`, `lname`, `fathName`, `linkData`, `recorddate`, `note`, `paymentType`, `isRinged`) " +
+                        $"VALUES (NULL,'NULL','NULL','NULL','NULL','{DateTime.Now.ToString("yyyy-MM-dd")}','NULL',NULL,'0')";
+            MySQL.ExecuteQueryWithoutResponse(query);
+
+            int clientID = Convert.ToInt32(MySQL.ExecuteQuery("SELECT MAX(`clientID`) FROM `clients`"));
+            f.GroupID = (int)group["groupID"];
+            f.MainForm = this;
+            if (f.ShowDialog() == DialogResult.OK)
+            {
+                try
+                {
+                    // Добавляем данные в табл. clients
+                    var fname = f.txtFirstName.Text;
+                    var lname = f.txtLastName.Text;
+                    var fathName = f.txtFatherName.Text;
+                    var linkData = f.txtPhones.Text;
+                    var recorddate = f.dtpRecordDate.Value.ToString("yyyy-MM-dd");
+                    var note = f.txtNotes.Text;
+
+                    query = $"UPDATE `clients`  SET  `fname`='{fname}', `lname`='{lname}', `fathName`='{fathName}', `linkData`='{linkData}', " +
+                        $"`recorddate`='{recorddate}', `note`='{note}' WHERE `clientID`='{clientID}'";
+
+                    MySQL.ExecuteQueryWithoutResponse(query);
+
+                    // Добавляем данные в табл. Group_Clients
+                    query = $"INSERT INTO `group_clients`(`GroupClientID`, `groupID`, `clientID`, `IsPaid`, `Notes`) VALUES (NULL,'{group["groupID"]}','{clientID}','0','')";
+                    MySQL.ExecuteQueryWithoutResponse(query);
+                    isEdited= true;
+                }
+                catch (Exception ex)
+                {
+                    MessageBox.Show(ex.Message, ex.Source);
+                }
+
+                dgGroups_Click(this.dgGroups, new EventArgs());
+            }
+            else if (f.ShowDialog() == DialogResult.Cancel)
+            {
+                MySQL.ExecuteQueryWithoutResponse($"DELETE FROM `clients` WHERE `clientID`={clientID}; ALTER TABLE `clients` AUTO_INCREMENT = {clientID}");
+            }
+        }
+
+        private void dgClients_MouseUp(object sender, MouseEventArgs e)
+        {
+            try
+            {
+                Point point = new Point(e.X, e.Y);
+                DataGrid.HitTestInfo hti = dgClients.HitTest(point);
+
+                dgClients.ContextMenu = null;
+                if (hti.Row >= 0)
+                {
+                    /*if (e.Button == MouseButtons.Right)
+                    {
+                        cmiFindClientsClientID.Visible = false;
+
+                        if (hti.Column == 0)
+                            cmiFindClientsClientID.Visible = true;
+
+                        dgClients.CurrentRowIndex = hti.Row;
+                        cmClients.Show(dgClients, point);
+                    }*/
+
+                    btnDeleteClient.Enabled = true;
+                    DataTable table = (DataTable)dgClients.DataSource;
+
+                    if (hti.Row <= table.Rows.Count - 1)
+                        btnDeleteClient.Tag = table.Rows[hti.Row]["clientID"];
                 }
             }
             catch (Exception ex)

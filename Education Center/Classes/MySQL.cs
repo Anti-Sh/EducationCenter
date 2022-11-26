@@ -14,6 +14,7 @@ namespace Education_Center.Classes
         static string dataBase = "education_center"; // Название БД
         static string username = "root"; // Имя пользователя
         static string password = ""; // Пароль
+
         public static void OpenConnection() // Статический метод, открывающий соединение с БД
         {
             connectString = "Server=" + SQLServerName + ";Database=" + dataBase
@@ -64,12 +65,10 @@ namespace Education_Center.Classes
         }
         public static DataTable GetDataBase(string name)
         {
-            OpenConnection();
             string query = $"SELECT * FROM `{name}`";
             MySqlDataAdapter returnVal = new MySqlDataAdapter(query, myConnection);
             DataTable dt = new DataTable(name);
             returnVal.Fill(dt);
-            CloseConnection();
             return dt;
         }
         
@@ -80,5 +79,7 @@ namespace Education_Center.Classes
             returnVal.Fill(dt);
             return dt;
         }
+
+        
     }
 }

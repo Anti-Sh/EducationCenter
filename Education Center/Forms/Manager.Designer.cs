@@ -255,6 +255,7 @@
             this.dgGroups.Name = "dgGroups";
             this.dgGroups.Size = new System.Drawing.Size(659, 134);
             this.dgGroups.TabIndex = 1;
+            this.dgGroups.Click += new System.EventHandler(this.dgGroups_Click);
             // 
             // splitter1
             // 

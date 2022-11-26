@@ -77,8 +77,8 @@ namespace Education_Center.Forms
         {
             InitializeComponent();
             DesigneDataGrids();
-            FillOnLoad();
             MySQL.OpenConnection();
+            FillOnLoad();
             MySQL.ExecuteQueryWithoutResponse("set autocommit=0;start transaction;");
             Closing += new CancelEventHandler(Manager_Closing);
         }
@@ -90,18 +90,16 @@ namespace Education_Center.Forms
                 if (MessageBox.Show("Вы хотите сохранить изменения в Базе Данных?", "Образовательный центр", MessageBoxButtons.YesNo) == DialogResult.Yes)
                     query = "commit;";
             
-            MySQL.ExecuteQueryWithoutResponse(query);
 
-            if (MessageBox.Show("Вы точно хотите выйти?", "Образовательный центр", MessageBoxButtons.YesNo) == DialogResult.Yes)
+            if (MessageBox.Show("Вы точно хотите выйти?", "Образовательный центр", MessageBoxButtons.YesNo) == DialogResult.No)
             {
-                // Cancel the Closing event from closing the form.
                 e.Cancel = true;
-                // Call method to save file...
             }
             else
             {
+                MySQL.ExecuteQueryWithoutResponse(query);
                 MySQL.CloseConnection();
-                Close();
+                Application.Exit();
             }
         }
 
@@ -125,7 +123,7 @@ namespace Education_Center.Forms
 
         private void btnCreateGroup_Click(object sender, EventArgs e)
         {
-            //this.AddNewGroupWaitingRoom();
+            this.AddNewGroupWaitingRoom();
         }
 
         private void btnDeleteGroup_Click(object sender, EventArgs e)
@@ -137,11 +135,14 @@ namespace Education_Center.Forms
                     MessageBox.Show("Нельзя удалить группу!", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
                     return;
                 }
+                int groupID = (int)btnDeleteGroup.Tag;
+                MySQL.ExecuteQueryWithoutResponse($"DELETE FROM `groups` WHERE `groupID`='{groupID}'");
+                
+                dgCourses_Click(dgCourses, e);
 
-                /* MainDataSet.groupsRow groupRow = mainDataSet.groups.FindBygroupID((int)btnDeleteGroup.Tag);
-                //mainDataSet.groups.RemovegroupsRow(groupRow);
-                groupRow.Delete();
-                btnDeleteGroup.Enabled = false;*/
+
+                btnDeleteGroup.Enabled = false;
+                isEdited= true;
             }
             catch (Exception ex)
             {
@@ -165,12 +166,11 @@ namespace Education_Center.Forms
                 }
 
                 int clientID = (int)btnDeleteClient.Tag;
-                /*MainDataSet.clientsRow clientRow = mainDataSet.clients.FindByclientID(clientID);
+                MySQL.ExecuteQueryWithoutResponse($"DELETE FROM `clients` WHERE `clientID`='{clientID}'");
+
                 btnDeleteClient.Enabled = false;
 
-
-                clientRow.Delete();
-                dgGroups_Click(dgGroups, new EventArgs());*/
+                dgGroups_Click(dgGroups, new EventArgs());
             }
             catch (Exception ex)
             {
@@ -1067,10 +1067,8 @@ namespace Education_Center.Forms
 
         private void FillOnLoad()
         {
-            MySQL.OpenConnection();
             var groups = MySQL.ExecuteQuery("SELECT * FROM `groupstatus`", 2);
             var directions = MySQL.ExecuteQuery("SELECT * FROM `directions`", 2);
-            MySQL.CloseConnection();
 
             cmbDirections.Items.Clear();
             cmbGroupStatus.Items.Clear();
@@ -1082,7 +1080,13 @@ namespace Education_Center.Forms
 
             cmbDirections.SelectedIndex = 0;
             cmbGroupStatus.SelectedIndex = 0;
-            
+
+            btnCreateGroup.Enabled = false;
+            btnCreateClient.Enabled = false;
+            btnShowGroups.Enabled = false;
+            btnDeleteClient.Enabled = false;
+            btnDeleteGroup.Enabled = false;
+
         }
 
         private void InsertToDataGrid(string tableName, string headerName)
@@ -1129,7 +1133,7 @@ namespace Education_Center.Forms
                 dgGroups.DataSource = dvGroups;
                 btnCreateGroup.Enabled = true;
                 btnCreateClient.Enabled = false;
-                // btnFindPasteClient.Enabled = false;
+                //btnFindPasteClient.Enabled = false;
                 btnDeleteClient.Enabled = false;
                 btnDeleteGroup.Enabled = false;
                 dgClients.DataSource = null;
@@ -1148,7 +1152,7 @@ namespace Education_Center.Forms
                 {
                     if (IsRightButtonGroups)
                     {
-                        System.Windows.Forms.DataGrid.HitTestInfo hti = dgGroups.HitTest(pointGroup);
+                        DataGrid.HitTestInfo hti = dgGroups.HitTest(pointGroup);
                         cmGroupsTable.Position = hti.Row;
 
                         IsRightButtonGroups = false;
@@ -1174,31 +1178,82 @@ namespace Education_Center.Forms
                             dvGroupClients.RowFilter = "groupID = " + groupID.ToString();
 
                             DataRow[] clients = new DataRow[dvGroupClients.Count];
+                            string query = "SELECT `c`.`clientID`, `c`.`fname`, `c`.`lname`, `c`.`fathName`, `c`.`linkData`, `c`.`recorddate`, `c`.`note`, " +
+                                "`c`.`paymentType`, `c`.`isRinged` FROM `group_clients` `g` INNER JOIN `clients` `c` ON `c`.`clientID`=`g`.`clientID` WHERE " +
+                                $"`g`.`groupID`='{groupID}';";
 
-                            // Получаем записи клиентов
-                            int i = 0;
-                            foreach (DataRowView drv in dvGroupClients)
-                                clients[i++] = drv.Row.GetParentRow("clientsgroup_clients");
-
+                            DataTable clnts = MySQL.GetDataBaseQuery(query);
                             // Помещаем полученные записи в таблицу dtClients				
-                            if (clients.Length > 0)
+                            if (clnts.Rows.Count > 0)
                             {
-                                DataTable dtClients = clients[0].Table.Clone();
+                                dgClients.DataSource = clnts;
+                                clnts.RowChanged += new DataRowChangeEventHandler(dtClients_RowChanged);
 
-                                foreach (DataRow client in clients)
-                                    dtClients.Rows.Add(client.ItemArray);
-
-                                dgClients.DataSource = dtClients;
-                                dtClients.RowChanged += new DataRowChangeEventHandler(dtClients_RowChanged);
-
-                                cmClientsTable = (CurrencyManager)this.BindingContext[dtClients, null];
+                                //cmClientsTable = (CurrencyManager)this.BindingContext[dtClients, null];
                             }
                             else
                                 dgClients.DataSource = null;
 
                             btnCreateClient.Enabled = true;
-                            btnFindPasteClient.Enabled = true;
+                            //btnFindPasteClient.Enabled = true;
                         }
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message, ex.Source);
+            }
+        }
+        private void dtClients_RowChanged(object sender, DataRowChangeEventArgs e)
+        {
+            int k = (int)e.Row["clientID"];
+            string query = $"UPDATE `clients` SET `fnane`='{e.Row["fname"]}'," +
+                $"`lname`='{e.Row["lname"]}',`fathName`='{e.Row["fathName"]}'," +
+                $"`linkData`='{e.Row["linkData"]}',`recorddate`='{e.Row["recorddate"]}'," +
+                $"`note`='{e.Row["note"]}',`paymentType`='{e.Row["paymentType"]}'," +
+                $"`isRinged`='{Convert.ToInt32(e.Row["isRinged"])}' WHERE `clientID`='0'";
+            MySQL.ExecuteQueryWithoutResponse(query);
+            isEdited= true;
+        }
+        // Добавляем новую группу со страницы 'Приемная' 
+        private void AddNewGroupWaitingRoom()
+        {
+            try
+            {
+                Group f = new Group();
+
+                int courseRowID = dgCourses.CurrentRowIndex;
+                DataView dvCourses = (DataView)dgCourses.DataSource;
+                DataRow course = dvCourses[courseRowID].Row;
+                f.Text += course["courseName"].ToString();
+
+                if (f.ShowDialog() == DialogResult.OK)
+                {
+                    try
+                    {
+                        int courseID = (int)course[0];
+
+                        var beginDate = f.dtpBeginDate.Value.ToString("yyyy-MM-dd");
+                        var endDate = f.dtpEndDate.Value.ToString("yyyy-MM-dd");
+                        var beginTime = f.dtpBeginTime.Value.ToString("HH:mm");
+                        var endTime = f.dtpEndTime.Value.ToString("HH:mm");
+                        var classNumber = int.Parse(f.cmbClassNumber.Text);
+                        var clientsCount = 0;
+                        var employeeID = f.cmbEmployee.SelectedIndex + 1;
+                        var note = f.txtNotes.Text;
+                        var StatusID = f.cmbStatus.SelectedIndex + 1;
+
+                        string query = "INSERT INTO `groups`(`groupID`, `beginDate`, `endDate`, `beginTime`, `endTime`, `clientsCount`, `classNumber`, " +
+                            $"`courseID`, `employeeID`, `note`, `StatusID`) VALUES " +
+                            $"(NULL,'{beginDate}','{endDate}','{beginTime}','{endTime}','{clientsCount}','{classNumber}','{courseID}','{employeeID}','{note}','{StatusID}')";
+
+                        MySQL.ExecuteQueryWithoutResponse(query);
+                        isEdited= true;
+                    }
+                    catch (Exception ex)
+                    {
+                        MessageBox.Show(ex.Message, ex.Source);
                     }
                 }
             }

@@ -72,6 +72,7 @@
             this.dtpBeginDate.Name = "dtpBeginDate";
             this.dtpBeginDate.Size = new System.Drawing.Size(200, 23);
             this.dtpBeginDate.TabIndex = 3;
+            this.dtpBeginDate.Validated += new System.EventHandler(this.dtpBeginDate_Validated);
             // 
             // panel1
             // 
@@ -85,6 +86,7 @@
             // 
             // btnCancel
             // 
+            this.btnCancel.DialogResult = System.Windows.Forms.DialogResult.Cancel;
             this.btnCancel.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F);
             this.btnCancel.Location = new System.Drawing.Point(537, 6);
             this.btnCancel.Name = "btnCancel";
@@ -95,6 +97,7 @@
             // 
             // btnOK
             // 
+            this.btnOK.DialogResult = System.Windows.Forms.DialogResult.OK;
             this.btnOK.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F);
             this.btnOK.Location = new System.Drawing.Point(453, 6);
             this.btnOK.Name = "btnOK";
@@ -111,6 +114,7 @@
             this.dtpEndDate.Name = "dtpEndDate";
             this.dtpEndDate.Size = new System.Drawing.Size(200, 23);
             this.dtpEndDate.TabIndex = 19;
+            this.dtpEndDate.Validated += new System.EventHandler(this.dtpEndDate_Validated);
             // 
             // label1
             // 
@@ -167,6 +171,7 @@
             this.dtpBeginTime.Size = new System.Drawing.Size(111, 23);
             this.dtpBeginTime.TabIndex = 24;
             this.dtpBeginTime.Value = new System.DateTime(2022, 11, 24, 14, 0, 0, 0);
+            this.dtpBeginTime.Validated += new System.EventHandler(this.dtpBeginTime_Validated);
             // 
             // dtpEndTime
             // 
@@ -179,6 +184,7 @@
             this.dtpEndTime.Size = new System.Drawing.Size(111, 23);
             this.dtpEndTime.TabIndex = 25;
             this.dtpEndTime.Value = new System.DateTime(2022, 11, 24, 22, 0, 0, 0);
+            this.dtpEndTime.Validated += new System.EventHandler(this.dtpEndTime_Validated);
             // 
             // txtNotes
             // 
@@ -189,6 +195,7 @@
             this.txtNotes.ScrollBars = System.Windows.Forms.ScrollBars.Vertical;
             this.txtNotes.Size = new System.Drawing.Size(246, 84);
             this.txtNotes.TabIndex = 39;
+            this.txtNotes.Validated += new System.EventHandler(this.txtNotes_Validated);
             // 
             // label5
             // 
@@ -238,10 +245,18 @@
             // 
             this.cmbClassNumber.Font = new System.Drawing.Font("Microsoft Sans Serif", 10.25F);
             this.cmbClassNumber.FormattingEnabled = true;
+            this.cmbClassNumber.Items.AddRange(new object[] {
+            "1",
+            "2",
+            "3",
+            "4",
+            "5",
+            "6"});
             this.cmbClassNumber.Location = new System.Drawing.Point(12, 224);
             this.cmbClassNumber.Name = "cmbClassNumber";
             this.cmbClassNumber.Size = new System.Drawing.Size(188, 25);
             this.cmbClassNumber.TabIndex = 44;
+            this.cmbClassNumber.Validated += new System.EventHandler(this.cmbClassNumber_Validated);
             // 
             // cmbEmployee
             // 
@@ -251,6 +266,7 @@
             this.cmbEmployee.Name = "cmbEmployee";
             this.cmbEmployee.Size = new System.Drawing.Size(188, 25);
             this.cmbEmployee.TabIndex = 45;
+            this.cmbEmployee.Validated += new System.EventHandler(this.cmbEmployee_Validated);
             // 
             // cmbStatus
             // 
@@ -296,24 +312,24 @@
         #endregion
 
         private System.Windows.Forms.Label lblGroupID;
-        private System.Windows.Forms.DateTimePicker dtpBeginDate;
+        public System.Windows.Forms.DateTimePicker dtpBeginDate;
         private System.Windows.Forms.Panel panel1;
         private System.Windows.Forms.Button btnCancel;
         private System.Windows.Forms.Button btnOK;
-        private System.Windows.Forms.DateTimePicker dtpEndDate;
+        public System.Windows.Forms.DateTimePicker dtpEndDate;
         private System.Windows.Forms.Label label1;
         private System.Windows.Forms.Label label2;
         private System.Windows.Forms.Label label3;
         private System.Windows.Forms.Label label4;
-        private System.Windows.Forms.DateTimePicker dtpBeginTime;
-        private System.Windows.Forms.DateTimePicker dtpEndTime;
-        private System.Windows.Forms.TextBox txtNotes;
+        public System.Windows.Forms.DateTimePicker dtpBeginTime;
+        public System.Windows.Forms.DateTimePicker dtpEndTime;
+        public System.Windows.Forms.TextBox txtNotes;
         private System.Windows.Forms.Label label5;
         private System.Windows.Forms.Label label6;
         private System.Windows.Forms.Label label7;
         private System.Windows.Forms.Label label8;
-        private System.Windows.Forms.ComboBox cmbClassNumber;
-        private System.Windows.Forms.ComboBox cmbEmployee;
-        private System.Windows.Forms.ComboBox cmbStatus;
+        public System.Windows.Forms.ComboBox cmbClassNumber;
+        public System.Windows.Forms.ComboBox cmbEmployee;
+        public System.Windows.Forms.ComboBox cmbStatus;
     }
 }

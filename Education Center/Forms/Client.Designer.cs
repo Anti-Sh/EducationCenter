@@ -75,7 +75,7 @@
             this.splitter1 = new System.Windows.Forms.Splitter();
             this.dgPayments = new System.Windows.Forms.DataGrid();
             this.tabPage4 = new System.Windows.Forms.TabPage();
-            this.dgClientsGroups = new System.Windows.Forms.DataGrid();
+            this.dgClientGroups = new System.Windows.Forms.DataGrid();
             this.panel1 = new System.Windows.Forms.Panel();
             this.btnCancel = new System.Windows.Forms.Button();
             this.btnOK = new System.Windows.Forms.Button();
@@ -91,7 +91,7 @@
             ((System.ComponentModel.ISupportInitialize)(this.dgClientsRealization)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.dgPayments)).BeginInit();
             this.tabPage4.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.dgClientsGroups)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.dgClientGroups)).BeginInit();
             this.panel1.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -174,6 +174,7 @@
             this.txtNotes.ScrollBars = System.Windows.Forms.ScrollBars.Vertical;
             this.txtNotes.Size = new System.Drawing.Size(249, 58);
             this.txtNotes.TabIndex = 37;
+            this.txtNotes.Validated += new System.EventHandler(this.txtNotes_Validated);
             // 
             // txtPhones
             // 
@@ -235,6 +236,7 @@
             this.dtpRecordDate.Name = "dtpRecordDate";
             this.dtpRecordDate.Size = new System.Drawing.Size(173, 23);
             this.dtpRecordDate.TabIndex = 31;
+            this.dtpRecordDate.Validated += new System.EventHandler(this.dtpRecordDate_Validated);
             // 
             // label3
             // 
@@ -619,7 +621,7 @@
             // 
             // tabPage4
             // 
-            this.tabPage4.Controls.Add(this.dgClientsGroups);
+            this.tabPage4.Controls.Add(this.dgClientGroups);
             this.tabPage4.Location = new System.Drawing.Point(4, 22);
             this.tabPage4.Name = "tabPage4";
             this.tabPage4.Size = new System.Drawing.Size(616, 433);
@@ -627,19 +629,19 @@
             this.tabPage4.Text = "Группы клиента";
             this.tabPage4.UseVisualStyleBackColor = true;
             // 
-            // dgClientsGroups
+            // dgClientGroups
             // 
-            this.dgClientsGroups.CaptionBackColor = System.Drawing.Color.DarkSeaGreen;
-            this.dgClientsGroups.CaptionFont = new System.Drawing.Font("Microsoft Sans Serif", 10.25F, System.Drawing.FontStyle.Bold);
-            this.dgClientsGroups.CaptionForeColor = System.Drawing.SystemColors.ControlLightLight;
-            this.dgClientsGroups.CaptionText = "Группы клиента";
-            this.dgClientsGroups.DataMember = "";
-            this.dgClientsGroups.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.dgClientsGroups.HeaderForeColor = System.Drawing.SystemColors.ControlText;
-            this.dgClientsGroups.Location = new System.Drawing.Point(0, 0);
-            this.dgClientsGroups.Name = "dgClientsGroups";
-            this.dgClientsGroups.Size = new System.Drawing.Size(616, 433);
-            this.dgClientsGroups.TabIndex = 1;
+            this.dgClientGroups.CaptionBackColor = System.Drawing.Color.DarkSeaGreen;
+            this.dgClientGroups.CaptionFont = new System.Drawing.Font("Microsoft Sans Serif", 10.25F, System.Drawing.FontStyle.Bold);
+            this.dgClientGroups.CaptionForeColor = System.Drawing.SystemColors.ControlLightLight;
+            this.dgClientGroups.CaptionText = "Группы клиента";
+            this.dgClientGroups.DataMember = "";
+            this.dgClientGroups.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.dgClientGroups.HeaderForeColor = System.Drawing.SystemColors.ControlText;
+            this.dgClientGroups.Location = new System.Drawing.Point(0, 0);
+            this.dgClientGroups.Name = "dgClientGroups";
+            this.dgClientGroups.Size = new System.Drawing.Size(616, 433);
+            this.dgClientGroups.TabIndex = 1;
             // 
             // panel1
             // 
@@ -700,7 +702,7 @@
             ((System.ComponentModel.ISupportInitialize)(this.dgClientsRealization)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.dgPayments)).EndInit();
             this.tabPage4.ResumeLayout(false);
-            ((System.ComponentModel.ISupportInitialize)(this.dgClientsGroups)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.dgClientGroups)).EndInit();
             this.panel1.ResumeLayout(false);
             this.ResumeLayout(false);
 
@@ -758,6 +760,6 @@
         private System.Windows.Forms.DataGrid dgClientsRealization;
         private System.Windows.Forms.Splitter splitter1;
         private System.Windows.Forms.DataGrid dgPayments;
-        private System.Windows.Forms.DataGrid dgClientsGroups;
+        public System.Windows.Forms.DataGrid dgClientGroups;
     }
 }

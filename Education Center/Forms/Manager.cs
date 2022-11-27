@@ -11,6 +11,7 @@ using System.Windows.Forms;
 using Education_Center.Classes;
 using System.Xml.Linq;
 using System.Data.SqlTypes;
+using System.Net;
 
 namespace Education_Center.Forms
 {
@@ -44,10 +45,11 @@ namespace Education_Center.Forms
             get { return isEdited; }
             set { isEdited = value; }
         }
-        
+
         #endregion
 
         #region Глобальные поля
+        const int Delta = 10;
         static private int dataID = 0;
         static internal int DataID
         {
@@ -61,18 +63,26 @@ namespace Education_Center.Forms
         private object server;
         private Type type;
 
+        internal enum TreeNodeType
+        {
+            Top,
+            Direction,
+            Course,
+            Group
+        }
+
         private TreeNode selectedNode;
         private string selectedNodeName = "";
-        //private TreeNodeType treeNodeType;
+        private TreeNodeType treeNodeType;
         private TreeNode MainTreeNode = null;
-        //private DirectionTreeNode[] dtns = null;
+        private DirectionTreeNode[] dtns = null;
 
         private Color itemColor;
         private Label labelSelectedListViewItem = new Label(); // Перемещаемый item в виде Label
         private Point NodePoint;
         private Point ClientPoint; // относительные координаты labelSelectedListViewItem
         private bool ItemCanMove = false;
-        //private CustomListItem selectedItem; // Выбранный item на ListView проводника
+        private CustomListItem selectedItem; // Выбранный item на ListView проводника
 
         private CurrencyManager currManagerIncome;
         private CurrencyManager currManagerOut;
@@ -1489,6 +1499,7 @@ namespace Education_Center.Forms
                 this.UpdateMainData();
             }
         }
+
         private void SearchClient()
         {
             SearchClient f = new SearchClient();
@@ -1508,10 +1519,511 @@ namespace Education_Center.Forms
             if (f.isEdited)
                 isEdited = true;
         }
+
         private void UpdateMainData()
         {
             MySQL.ExecuteQueryWithoutResponse("commit;set autocommit=0;start transaction;");
             MessageBox.Show("Данные успешно загружены в базу данных!");
+        }
+
+        internal void Explorer()
+        {
+            try
+            {
+                tvManager.Sorted = true;
+                tvManager.Nodes.Clear();
+                lvManager.Items.Clear();
+
+
+                DataTable directions = MySQL.GetDataBase("directions");
+                // Вершина TreeView
+                MainTreeNode = new TreeNode("Учебный центр");
+
+                tvManager.Nodes.Add(MainTreeNode);
+                tvManager.Nodes[0].ImageIndex = 0;
+                tvManager.Nodes[0].ForeColor = Color.Blue;
+
+                dtns = new DirectionTreeNode[directions.Rows.Count];
+                DirectionTreeNode dtn = null;
+
+                for (int k = 0; k < directions.Rows.Count; k++)
+                {
+
+                    //Добавляем направление с дочерними узлами
+                    dtn = new DirectionTreeNode();
+
+                    dtn.DirectionID = (int)directions.Rows[k]["directionID"];
+                    dtn.DirectionName = dtn.Text = directions.Rows[k]["directName"].ToString();
+                    dtn.DirectionNote = directions.Rows[k]["note"].ToString();
+
+                    dtn.ImageIndex = 11;
+                    dtn.ForeColor = Color.RoyalBlue;
+
+                    dtn.GetChilds();
+                    dtn.Tag = directions.Rows[k];
+
+                    dtns[k] = dtn;
+                    dtn = null;
+                }
+
+                MainTreeNode.Nodes.AddRange(dtns);
+                MainTreeNode.Expand();
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message, ex.Source);
+            }
+        }
+
+        // Заполняем ListView данными узла дерева 
+        private void FillListView(TreeNodeType treeNodeType, TreeNode treeNode)
+        {
+            try
+            {
+                int imageIndexListView = 11;
+                TreeNode tempTreeNode = null;
+                lvManager.Columns.Clear();
+                DataTable groupsDT = MySQL.GetDataBase("groups");
+                DataRow selectedDirection = null;
+                DataRow selectedCourse = null;
+                DataRow selectedGroup = null;
+
+                switch (treeNodeType)
+                {
+                    case TreeNodeType.Top:
+                        // В ListView находятся направления	
+                        tempTreeNode = treeNode;
+                        imageIndexListView = 11;
+                        break;
+                    case TreeNodeType.Direction:
+                        // В ListView находятся курсы
+                        DirectionTreeNode dtn = new DirectionTreeNode();
+
+                        selectedDirection = (DataRow)selectedNode.Tag;
+                        dtn.DirectionID = (int)selectedDirection["directionID"];
+                        dtn.GetChilds();
+
+                        tempTreeNode = treeNode;
+                        imageIndexListView = 10;
+                        break;
+                    case TreeNodeType.Course:
+                        // В ListView находятся группы
+                        CourseTreeNode ctn = new CourseTreeNode();
+
+                        selectedCourse = (DataRow)selectedNode.Tag;
+                        ctn.CourseID = (int)selectedCourse["courseID"];
+                        ctn.GetChilds();
+
+                        tempTreeNode = treeNode;
+                        imageIndexListView = 6;
+                        break;
+                    case TreeNodeType.Group:
+                        // В ListView находятся клиенты
+                        GroupTreeNode gtn = new GroupTreeNode();
+
+                        selectedGroup = (DataRow)selectedNode.Tag;
+                        gtn.GroupID = (int)selectedGroup["groupID"];
+                        gtn.GetChilds();
+
+                        tempTreeNode = gtn;
+                        imageIndexListView = 7;
+                        break;
+                }
+
+                lvManager.Items.Clear();
+                string str = "";
+
+                // В ListView добавляем группы
+                if (tempTreeNode is CourseTreeNode)
+                {
+                    // Добавляем в ListView колонки из таблицы groups
+                    for (int i = 0; i < groupsDT.Columns.Count; i++)
+                    {
+                        ColumnHeader ch = new ColumnHeader();
+
+                        ch.Text = groupsDT.Columns[i].Caption;
+                        ch.Width = 100;
+                        lvManager.Columns.Add(ch);
+                    }
+
+                    DataRow course = (DataRow)tempTreeNode.Tag;
+                    DataRow[] groups = course.GetChildRows("coursegroups");
+
+                    for (int i = 0; i < groups.Length; i++)
+                    {
+                        // В ListViewItem добавляем массив строк данной записи из табл. groups
+                        string[] subitems = new string[groups[i].ItemArray.Length];
+                        for (int j = 0; j < subitems.Length; j++)
+                        {
+                            subitems[j] = groups[i][j].ToString();
+                        }
+
+                        if (groups[i]["beginDate"] != null)
+                        {
+                            DateTime beginDate = (DateTime)groups[i]["beginDate"];
+                            subitems[1] = beginDate.ToString("dd MMMM yyyy");
+                        }
+
+                        if (groups[i]["endDate"] != null)
+                        {
+                            DateTime endDate = (DateTime)groups[i]["endDate"];
+                            subitems[2] = endDate.ToString("dd MMMM yyyy");
+                        }
+
+                        if (groups[i]["beginTime"] != null)
+                        {
+                            DateTime beginTime = (DateTime)groups[i]["beginTime"];
+                            subitems[3] = beginTime.ToString("HH:mm");
+                        }
+
+                        if (groups[i]["endTime"] != null)
+                        {
+                            DateTime endTime = (DateTime)groups[i]["endTime"];
+                            subitems[4] = endTime.ToString("HH:mm");
+                        }
+
+                        CustomListItem cli = new CustomListItem(subitems, imageIndexListView);
+
+                        int statusID = (int)groups[i]["StatusID"];
+
+                        if (statusID == 1) // Группа набирается
+                        {
+                            cli.ForeColor = Color.Red;
+                        }
+                        else if (statusID == 2) // Группа обучается
+                        {
+                            cli.ForeColor = Color.Green;
+                        }
+                        else if (statusID == 3) // Группа закончила обучение
+                        {
+                            cli.ForeColor = Color.Blue;
+                        }
+
+                        cli.BindedRow = groups[i];
+                        lvManager.Items.Add(cli);
+                        str = "";
+                    }
+                }
+                // В ListView добавляем курсы
+                else if (tempTreeNode is DirectionTreeNode)
+                {
+                    DataRow[] courses = selectedDirection.GetChildRows("directionscourse");
+                    foreach (DataRow course in courses)
+                    {
+                        CustomListItem cli = new CustomListItem();
+
+                        str = course["courseName"].ToString();
+
+                        cli.Text = str;
+                        cli.BindedRow = course;
+                        cli.ImageIndex = imageIndexListView;
+
+                        lvManager.Items.Add(cli);
+
+                        str = "";
+                    }
+                }
+                // В ListView добавляем клиентов
+                else if (tempTreeNode is GroupTreeNode)
+                {
+                    for (int i = 0; i < tempTreeNode.Nodes.Count; i++)
+                    {
+                        DataRow client = (DataRow)tempTreeNode.Nodes[i].Tag;
+
+                        CustomListItem cli = new CustomListItem();
+
+                        str = client["lname"].ToString() + " " + client["fname"].ToString() + " " + client["fathName"].ToString();
+
+                        cli.Text = str;
+                        cli.BindedRow = (DataRow)tempTreeNode.Nodes[i].Tag;
+                        cli.ImageIndex = imageIndexListView;
+
+                        lvManager.Items.Add(cli);
+
+                        str = "";
+                    }
+                }
+                else // Добавляем направления в ListView
+                {
+                    DataTable directionsDT = MySQL.GetDataBase("directions");
+                    for (int i = 0; i < directionsDT.Rows.Count; i++)
+                    {
+                        CustomListItem cli = new CustomListItem();
+                        if (directionsDT.Rows[i].RowState != DataRowState.Deleted)
+                        {
+                            str = directionsDT.Rows[i]["directName"].ToString();
+                            cli.Text = str;
+                            cli.BindedRow = directionsDT.Rows[i];
+                            cli.ImageIndex = imageIndexListView;
+
+                            lvManager.Items.Add(cli);
+                        }
+                        str = "";
+                    }
+                }
+
+                spCount.Text = "Количество записей: " + lvManager.Items.Count.ToString();
+                for (int i = 0; i < lvManager.Items.Count; i++)
+                {
+                    lvManager.Items[i].ForeColor = tempTreeNode.Nodes[i].ForeColor;
+                    lvManager.Items[i].ImageIndex = imageIndexListView;
+
+                    itemColor = lvManager.Items[i].ForeColor; // Цвет текста передвигаемой item
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message, ex.Source);
+            }
+        }
+
+        // Возвращаем строку выбранных item-ов в ListView
+        private string GetStringItems()
+        {
+            string str = "";
+
+            for (int i = 0; i < lvManager.SelectedItems.Count; i++)
+                str += lvManager.SelectedItems[i].Text + "\n";
+
+            return str;
+        }
+
+        // Положение item относительно курсора 
+        private Point GetItemPoint(Point ptWorld)
+        {
+            Point p = new Point(ptWorld.X + Delta, ptWorld.Y);
+
+            return tpExplorer.PointToClient(p);
+        }
+        // Удаляем перемещаемый item 
+        private void DeleteLabel()
+        {
+            labelSelectedListViewItem.Text = "";
+            labelSelectedListViewItem.Hide();
+            ItemCanMove = false;
+        }
+
+        // Перевод выбранных клиентов из одной группы в другую - ЖЕЛАТЕЛЬНО РАЗБИТЬ НА ПРОСТЫЕ МЕТОДЫ
+        private void TransferClients(TreeNode oldGroup, TreeNode newGroup)
+        {
+            CourseTreeNode newCourse = (CourseTreeNode)newGroup.Parent; // Определяем курс для новой группы
+            CourseTreeNode oldCourse = (CourseTreeNode)oldGroup.Parent; // Определяем курс старой группы
+
+            double CoursePrice = (double)newCourse.CoursePrice; // Стоимость нового курса
+
+            // Определяем все оплаты клиента
+            DataRow oldGroupRow = (DataRow)oldGroup.Tag;
+            DataRow newGroupRow = (DataRow)newGroup.Tag;
+
+            DataRow[] groupClientsRows = oldGroupRow.GetChildRows("groupsgroup_clients");
+
+            DataView dvIncome = new DataView(MySQL.GetDataBase("income"));
+            int clientID = (int)selectedItem.BindedRow["ClientID"]; // ID клиента
+            dvIncome.RowFilter = "(ClientID = " + clientID.ToString() + ") AND (IsRealized <> 1)";
+
+            // Определяем сумму клиента на счету
+            double incomeSumm = 0;
+            double clientSumm = 0;
+            double realizedSumm = 0;
+            foreach (DataRowView drv in dvIncome)
+            {
+                DataRow[] planRows = drv.Row.GetChildRows("incomePlanRealization");
+
+                foreach (DataRow planRow in planRows)
+                    if ((bool)planRow["IsRealized"]) // Проверка реализации суммы в PlanRealization
+                    {
+                        realizedSumm += (double)planRow["SummaRealization"];
+                    }
+
+                incomeSumm += (double)drv.Row["Summa"];
+            }
+
+            clientSumm = incomeSumm - realizedSumm;
+            ClientTransfer fct = new ClientTransfer();
+
+            fct.dgClientPayments.DataSource = dvIncome;
+
+            fct.txtClientName.Text = selectedItem.BindedRow["lname"].ToString() + " " + selectedItem.BindedRow["fname"].ToString() + " " + selectedItem.BindedRow["fathName"].ToString();
+            fct.txtAccountSumm.Text = clientSumm.ToString();
+
+            fct.lblOldGroupNumber.Text = oldGroupRow["groupID"].ToString();
+            fct.lblNewGroupNumber.Text = newGroupRow["groupID"].ToString();
+
+            fct.lblOldCourseName.Text = oldCourse.Text;
+
+            DataRow courseRow = (DataRow)newCourse.Tag;
+            double newCoursePrice = Convert.ToDouble(courseRow["priceNumber"]);
+            fct.lblNewCourseName.Text = newCourse.CourseName.ToString();
+            fct.txtNewCoursePrice.Text = newCoursePrice.ToString();
+
+            // Расчет разницы
+            fct.txtDifferenceCount.Text = Convert.ToString(clientSumm - newCoursePrice);
+
+            if (fct.ShowDialog() == DialogResult.OK)
+            {
+                lvManager.Items.Add(selectedItem);
+
+                string query = $"INSERT INTO `group_clients`(`GroupClientID`, `groupID`, `clientID`, `IsPaid`, `Notes`) VALUES " +
+                    $"(NULL,'{int.Parse(selectedNode.Text)}','{(int)selectedItem.BindedRow["clientID"]}','1','')";
+
+                MySQL.ExecuteQueryWithoutResponse(query);
+
+                this.FillListView(treeNodeType, selectedNode);
+            }
+        }
+
+        // Получаем коллекцию выбранных клиентов в ListView
+        private ClientTreeNode[] GetSelectedClients(int clientsCount)
+        {
+            ClientTreeNode[] ctns = new ClientTreeNode[clientsCount];
+            ClientTreeNode ctn = new ClientTreeNode();
+
+            int i = 0;
+            foreach (ListViewItem lvi in lvManager.SelectedItems)
+            {
+                CustomListItem cli = (CustomListItem)lvi;
+
+                ctn.FirstName = cli.BindedRow[0].ToString();
+                ctn.LastName = cli.BindedRow[1].ToString();
+
+                ctn.Text = ctn.FirstName + " " + ctn.LastName;
+                ctn.ImageIndex = 7;
+
+                ctns[i++] = ctn;
+            }
+
+            return ctns;
+        }
+
+        internal enum StatusType
+        {
+            Filling = 1,
+            Learning = 2,
+            Finished = 3
+        }
+
+        private void ChangeStatus(ListView.SelectedListViewItemCollection items, StatusType status)
+        {
+            int statusID = 0;
+
+            Color color = Color.Black;
+            switch (status)
+            {
+                // Группа набирается
+                case StatusType.Filling:
+                    statusID = 1;
+                    color = Color.Red;
+                    break;
+
+                // Группа обучается
+                case StatusType.Learning:
+                    statusID = 2;
+                    color = Color.Green;
+                    break;
+
+                // Группа закончила обучение
+                case StatusType.Finished:
+                    statusID = 3;
+                    color = Color.Blue;
+                    break;
+            }
+
+            foreach (ListViewItem lvi in items)
+            {
+                CustomListItem item = (CustomListItem)lvi;
+
+                item.BindedRow["StatusID"] = statusID;
+                item.ForeColor = color;
+                selectedNode.Nodes[item.Index].ForeColor = color;
+            }
+        }
+
+        public struct DataGridItem
+        {
+            private string text;
+
+            public string Text
+            {
+                get { return text; }
+                set { text = value; }
+            }
+
+            internal DataGridItem(string text)
+            {
+                this.text = text;
+            }
+        }
+
+        private void OpenItemInForm(TreeNodeType treeNodeType)
+        {
+            // Выбранный элемент в ListView
+            CustomListItem cli = (CustomListItem)lvManager.SelectedItems[0];
+
+            try
+            {
+                switch (treeNodeType)
+                {
+                    case TreeNodeType.Group:
+                        Client client = new Client(cli.BindedRow);
+
+                        int clientID = (int)cli.BindedRow[0];
+
+                        DataView dvClientGroups = new DataView(MySQL.GetDataBase("group_clients"));
+                        dvClientGroups.RowFilter = "clientID = " + clientID.ToString();
+
+                        DataGridItem[] items = new DataGridItem[dvClientGroups.Count];
+
+                        int i = 0;
+                        foreach (DataRowView drv in dvClientGroups)
+                        {
+                            DataGridItem dgi = new DataGridItem(drv.Row[1].ToString());
+                            items[i++] = dgi;
+                        }
+                        client.dgClientGroups.SetDataBinding(items, null);
+
+                        client.Text += selectedNode.Text;
+                        if (client.ShowDialog() == DialogResult.OK)
+                        {
+
+                        };
+                        break;
+
+                    case TreeNodeType.Course:
+                        Group group = new Group(cli.BindedRow);
+
+                        group.Text += selectedNodeName;
+                        if (group.ShowDialog() == DialogResult.OK)
+                        {
+
+                        }
+                        break;
+
+                    case TreeNodeType.Direction:
+                        Course course = new Course(cli.BindedRow);
+
+                        course.Text += selectedNodeName;
+                        if (course.ShowDialog() == DialogResult.OK)
+                        {
+
+                        }
+                        break;
+
+                    case TreeNodeType.Top:
+                        Direction direction = new Direction(cli.BindedRow);
+
+                        if (direction.ShowDialog() == DialogResult.OK)
+                        {
+
+                        }
+                        break;
+
+                    default: return;
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message, ex.Source);
+            }
         }
     }
 }

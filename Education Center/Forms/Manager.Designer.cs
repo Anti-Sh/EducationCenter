@@ -109,6 +109,7 @@
             this.txtOweToEdCenter = new System.Windows.Forms.TextBox();
             this.label8 = new System.Windows.Forms.Label();
             this.cmbFilteringDirection = new System.Windows.Forms.ComboBox();
+            this.spCount = new System.Windows.Forms.StatusBarPanel();
             this.tcManager.SuspendLayout();
             this.tpWaitingRoom.SuspendLayout();
             this.panel2.SuspendLayout();
@@ -134,6 +135,7 @@
             ((System.ComponentModel.ISupportInitialize)(this.dgStatistic)).BeginInit();
             this.panel9.SuspendLayout();
             this.groupBox2.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.spCount)).BeginInit();
             this.SuspendLayout();
             // 
             // tbMain
@@ -878,9 +880,10 @@
             // 
             this.sbMain.Location = new System.Drawing.Point(0, 2);
             this.sbMain.Name = "sbMain";
+            this.sbMain.Panels.AddRange(new System.Windows.Forms.StatusBarPanel[] {
+            this.spCount});
             this.sbMain.Size = new System.Drawing.Size(792, 22);
             this.sbMain.TabIndex = 0;
-            this.sbMain.Text = "statusBar1";
             // 
             // tpStatistic
             // 
@@ -992,6 +995,11 @@
             this.cmbFilteringDirection.TabIndex = 0;
             this.cmbFilteringDirection.SelectionChangeCommitted += new System.EventHandler(this.cmbFilteringDirection_SelectionChangeCommitted);
             // 
+            // spCount
+            // 
+            this.spCount.Name = "spCount";
+            this.spCount.Text = "Количество записей";
+            // 
             // Manager
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -1030,6 +1038,7 @@
             this.panel9.ResumeLayout(false);
             this.groupBox2.ResumeLayout(false);
             this.groupBox2.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.spCount)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -1116,5 +1125,6 @@
         private System.Windows.Forms.TextBox txtOweToEdCenter;
         private System.Windows.Forms.DataGrid dgStatistic;
         private System.Windows.Forms.Label lblDateTime;
+        private System.Windows.Forms.StatusBarPanel spCount;
     }
 }

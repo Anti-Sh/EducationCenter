@@ -24,8 +24,8 @@ namespace Education_Center.Forms
 
             this.bindingRow = bindingRow;
 
-            this.txtDirectionName.Text = bindingRow["directName"].ToString();
-            this.txtDirectionNote.Text = bindingRow["note"].ToString();
+            txtDirectionName.Text = bindingRow["directName"].ToString();
+            txtDirectionNote.Text = bindingRow["note"].ToString();
         }
         public Direction()
         {

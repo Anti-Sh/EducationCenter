@@ -40,12 +40,11 @@ namespace Education_Center.Forms
         }
 
        
-        /*public Group(MainDataSet ds, DataRow bindingRow)
+        public Group(DataRow bindingRow)
         {
             InitializeComponent();
-            mainDataSet = ds;
 
-            cmbStatus.DataSource = mainDataSet.GroupStatus;
+            cmbStatus.DataSource = MySQL.GetDataBase("groupstatus");
             cmbStatus.DisplayMember = "StatusName";
             //cmGroup = (CurrencyManager)this.BindingContext[mainDataSet, "GroupStatus"];
             DataView dvStatus = (DataView)cmGroupStatus.List;
@@ -53,7 +52,7 @@ namespace Education_Center.Forms
             int statusPos = dvStatus.Find(bindingRow["StatusID"]);
             cmbStatus.SelectedIndex = statusPos;
 
-            cmbEmployee.DataSource = mainDataSet.employees;
+            cmbEmployee.DataSource = MySQL.GetDataBase("employees");
             cmbEmployee.DisplayMember = "EmployeeName";
             //cmEmployees = (CurrencyManager)this.BindingContext[mainDataSet, "employees"];
             DataView dvEmployee = (DataView)cmEmployees.List;
@@ -97,7 +96,7 @@ namespace Education_Center.Forms
 
             this.txtNotes.Text = bindingRow[9].ToString();
             this.cmbClassNumber.Text = bindingRow[6].ToString();
-        }*/
+        }
 
         private void Group_Load(object sender, EventArgs e)
         {

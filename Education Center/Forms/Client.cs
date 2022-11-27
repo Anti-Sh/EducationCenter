@@ -13,6 +13,12 @@ namespace Education_Center.Forms
 {
     public partial class Client : Form
     {
+        private DataRow bindingRow;
+        internal DataRow BindingRow
+        {
+            get { return bindingRow; }
+            set { bindingRow = value; }
+        }
         private int groupID = 0;
         internal int GroupID
         {
@@ -60,24 +66,84 @@ namespace Education_Center.Forms
             //cmPaymentType.Position = 0;
         }
 
+        bool IsCreating = false;
+
+        public Client(DataRow bindingRow)
+        {
+            InitializeComponent();
+
+            dgPayments.Tag = "Payments";
+            dgClientsRealization.Tag = "Realization";
+
+            IsCreating = true;
+            Size labelSize = new Size(this.Width, lblClientID.Size.Height);
+            this.lblClientID.Size = labelSize;
+
+            this.bindingRow = bindingRow;
+            this.ClientID = (int)bindingRow[0];
+
+            this.lblClientID.Text += this.ClientID.ToString();
+            this.txtFirstName.Text = bindingRow[1].ToString();
+            this.txtLastName.Text = bindingRow[2].ToString();
+            this.txtFatherName.Text = bindingRow[3].ToString();
+            this.txtPhones.Text = bindingRow[4].ToString();
+            this.dtpRecordDate.Value = (DateTime)bindingRow[5];
+            this.txtNotes.Text = bindingRow[6].ToString();
+            
+            //mainDataSet.income.Columns["clientID"].DefaultValue = this.ClientID;
+            //mainDataSet.RealizedTable.Columns["clientID"].DefaultValue = this.ClientID;
+
+            btnCreateClientPayment.Click += new EventHandler(btnCreateClientPayment_Click);
+            btnRealizedClients.Click += new EventHandler(btnRealizedClients_Click);
+            DesigneDataGrids();
+
+            cmbPaymentType.DataSource = MySQL.GetDataBase("payment_type");
+            cmbPaymentType.DisplayMember = "payment_typeName";
+            cmPaymentType.Position = 0;
+
+            //**********************
+            btnFindClient.Click += new EventHandler(btnFindClient_Click);
+            btnSelectClient.Click += new EventHandler(btnSelectClient_Click);
+            dgFindedClients.MouseUp += new MouseEventHandler(dgFindedClients_MouseUp);
+            dgPayments.MouseUp += new MouseEventHandler(dgPayments_MouseUp);
+            dgClientsRealization.MouseUp += new MouseEventHandler(dgPayments_MouseUp);
+            //**********************
+        }
+
         private void txtLastName_Validated(object sender, EventArgs e)
         {
-
+            if (IsCreating)
+                if (txtLastName.Text != this.bindingRow["lname"].ToString())
+                {
+                    this.bindingRow["lname"] = txtLastName.Text;
+                }
         }
 
         private void txtFirstName_Validated(object sender, EventArgs e)
         {
-
+            if (IsCreating)
+                if (txtFirstName.Text != this.bindingRow["fname"].ToString())
+                {
+                    this.bindingRow["fname"] = txtFirstName.Text;
+                }
         }
 
         private void txtFatherName_Validated(object sender, EventArgs e)
         {
-
+            if (IsCreating)
+                if (txtFatherName.Text != this.bindingRow["fathName"].ToString())
+                {
+                    this.bindingRow["fathName"] = txtFatherName.Text;
+                }
         }
 
         private void txtPhones_Validated(object sender, EventArgs e)
         {
-
+            if (IsCreating)
+                if (txtPhones.Text != this.bindingRow["linkData"].ToString())
+                {
+                    this.bindingRow["linkData"] = txtPhones.Text;
+                }
         }
 
         private void Client_Load(object sender, EventArgs e)
@@ -347,6 +413,24 @@ namespace Education_Center.Forms
             string textFormat = String.Format(" - Date: {0}", date.ToString("dd MMMM yyyy"));
             caption += textFormat;
             dataGrid.CaptionText = caption;
+        }
+
+        private void dtpRecordDate_Validated(object sender, EventArgs e)
+        {
+            if (IsCreating)
+                if (dtpRecordDate.Value != (DateTime)this.bindingRow["recorddate"])
+                {
+                    this.bindingRow["recorddate"] = dtpRecordDate.Value;
+                }
+        }
+
+        private void txtNotes_Validated(object sender, EventArgs e)
+        {
+            if (IsCreating)
+                if (txtNotes.Text != this.bindingRow["note"].ToString())
+                {
+                    this.bindingRow["note"] = txtNotes.Text;
+                }
         }
     }
 }

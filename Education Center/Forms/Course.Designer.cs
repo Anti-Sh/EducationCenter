@@ -39,6 +39,7 @@
             // 
             // btnCancel
             // 
+            this.btnCancel.DialogResult = System.Windows.Forms.DialogResult.Cancel;
             this.btnCancel.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F);
             this.btnCancel.Location = new System.Drawing.Point(342, 148);
             this.btnCancel.Name = "btnCancel";
@@ -49,6 +50,7 @@
             // 
             // btnOK
             // 
+            this.btnOK.DialogResult = System.Windows.Forms.DialogResult.OK;
             this.btnOK.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F);
             this.btnOK.Location = new System.Drawing.Point(342, 120);
             this.btnOK.Name = "btnOK";
@@ -66,9 +68,9 @@
             this.lblClientID.ForeColor = System.Drawing.Color.OliveDrab;
             this.lblClientID.Location = new System.Drawing.Point(162, 9);
             this.lblClientID.Name = "lblClientID";
-            this.lblClientID.Size = new System.Drawing.Size(82, 20);
+            this.lblClientID.Size = new System.Drawing.Size(73, 20);
             this.lblClientID.TabIndex = 30;
-            this.lblClientID.Text = "Курс № 1";
+            this.lblClientID.Text = "Курс № ";
             // 
             // txtCoursePrice
             // 
@@ -77,6 +79,7 @@
             this.txtCoursePrice.Name = "txtCoursePrice";
             this.txtCoursePrice.Size = new System.Drawing.Size(280, 23);
             this.txtCoursePrice.TabIndex = 34;
+            this.txtCoursePrice.Validated += new System.EventHandler(this.txtCoursePrice_Validated);
             // 
             // txtCourseName
             // 
@@ -85,6 +88,7 @@
             this.txtCourseName.Name = "txtCourseName";
             this.txtCourseName.Size = new System.Drawing.Size(280, 23);
             this.txtCourseName.TabIndex = 33;
+            this.txtCourseName.Validated += new System.EventHandler(this.txtCourseName_Validated);
             // 
             // label2
             // 
@@ -122,6 +126,7 @@
             this.Controls.Add(this.btnOK);
             this.Name = "Course";
             this.Text = "Course";
+            this.Load += new System.EventHandler(this.Course_Load);
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -132,9 +137,9 @@
         private System.Windows.Forms.Button btnCancel;
         private System.Windows.Forms.Button btnOK;
         private System.Windows.Forms.Label lblClientID;
-        private System.Windows.Forms.TextBox txtCoursePrice;
         private System.Windows.Forms.TextBox txtCourseName;
         private System.Windows.Forms.Label label2;
         private System.Windows.Forms.Label label1;
+        public System.Windows.Forms.TextBox txtCoursePrice;
     }
 }

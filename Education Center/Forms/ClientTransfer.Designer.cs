@@ -45,9 +45,9 @@
             this.lblNewGroupNumber = new System.Windows.Forms.Label();
             this.lblOldGroupNumber = new System.Windows.Forms.Label();
             this.panel1 = new System.Windows.Forms.Panel();
-            this.dgClientPayments = new System.Windows.Forms.DataGrid();
             this.btnCancel = new System.Windows.Forms.Button();
             this.btnOK = new System.Windows.Forms.Button();
+            this.dgClientPayments = new System.Windows.Forms.DataGrid();
             this.panel1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dgClientPayments)).BeginInit();
             this.SuspendLayout();
@@ -226,20 +226,6 @@
             this.panel1.Size = new System.Drawing.Size(624, 34);
             this.panel1.TabIndex = 17;
             // 
-            // dgClientPayments
-            // 
-            this.dgClientPayments.CaptionBackColor = System.Drawing.Color.OliveDrab;
-            this.dgClientPayments.CaptionFont = new System.Drawing.Font("Microsoft Sans Serif", 12.25F, System.Drawing.FontStyle.Bold);
-            this.dgClientPayments.CaptionForeColor = System.Drawing.SystemColors.ControlLightLight;
-            this.dgClientPayments.CaptionText = "Оплаты клиента";
-            this.dgClientPayments.DataMember = "";
-            this.dgClientPayments.Dock = System.Windows.Forms.DockStyle.Bottom;
-            this.dgClientPayments.HeaderForeColor = System.Drawing.SystemColors.ControlText;
-            this.dgClientPayments.Location = new System.Drawing.Point(0, 179);
-            this.dgClientPayments.Name = "dgClientPayments";
-            this.dgClientPayments.Size = new System.Drawing.Size(624, 241);
-            this.dgClientPayments.TabIndex = 18;
-            // 
             // btnCancel
             // 
             this.btnCancel.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F);
@@ -259,6 +245,20 @@
             this.btnOK.TabIndex = 6;
             this.btnOK.Text = "OK";
             this.btnOK.UseVisualStyleBackColor = true;
+            // 
+            // dgClientPayments
+            // 
+            this.dgClientPayments.CaptionBackColor = System.Drawing.Color.OliveDrab;
+            this.dgClientPayments.CaptionFont = new System.Drawing.Font("Microsoft Sans Serif", 12.25F, System.Drawing.FontStyle.Bold);
+            this.dgClientPayments.CaptionForeColor = System.Drawing.SystemColors.ControlLightLight;
+            this.dgClientPayments.CaptionText = "Оплаты клиента";
+            this.dgClientPayments.DataMember = "";
+            this.dgClientPayments.Dock = System.Windows.Forms.DockStyle.Bottom;
+            this.dgClientPayments.HeaderForeColor = System.Drawing.SystemColors.ControlText;
+            this.dgClientPayments.Location = new System.Drawing.Point(0, 179);
+            this.dgClientPayments.Name = "dgClientPayments";
+            this.dgClientPayments.Size = new System.Drawing.Size(624, 241);
+            this.dgClientPayments.TabIndex = 18;
             // 
             // ClientTransfer
             // 
@@ -294,11 +294,6 @@
         }
 
         #endregion
-
-        private System.Windows.Forms.TextBox txtClientName;
-        private System.Windows.Forms.TextBox txtAccountSumm;
-        private System.Windows.Forms.TextBox txtNewCoursePrice;
-        private System.Windows.Forms.TextBox txtDifferenceCount;
         private System.Windows.Forms.Label lblClientName;
         private System.Windows.Forms.Label label2;
         private System.Windows.Forms.Label lblAccountSumma;
@@ -307,13 +302,17 @@
         private System.Windows.Forms.Label lblGroupFrom;
         private System.Windows.Forms.Label lblTo;
         private System.Windows.Forms.Label lblGroupTo;
-        private System.Windows.Forms.Label lblOldCourseName;
-        private System.Windows.Forms.Label lblNewCourseName;
-        private System.Windows.Forms.Label lblNewGroupNumber;
-        private System.Windows.Forms.Label lblOldGroupNumber;
         private System.Windows.Forms.Panel panel1;
-        private System.Windows.Forms.DataGrid dgClientPayments;
         private System.Windows.Forms.Button btnCancel;
         private System.Windows.Forms.Button btnOK;
+        public System.Windows.Forms.TextBox txtClientName;
+        public System.Windows.Forms.TextBox txtAccountSumm;
+        public System.Windows.Forms.TextBox txtNewCoursePrice;
+        public System.Windows.Forms.TextBox txtDifferenceCount;
+        public System.Windows.Forms.Label lblOldCourseName;
+        public System.Windows.Forms.Label lblNewCourseName;
+        public System.Windows.Forms.Label lblNewGroupNumber;
+        public System.Windows.Forms.Label lblOldGroupNumber;
+        internal System.Windows.Forms.DataGrid dgClientPayments;
     }
 }

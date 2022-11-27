@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Education_Center.Classes;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
@@ -14,83 +15,16 @@ namespace Education_Center.Forms
     {
         private DataTable dtClients;
         public DataView dvSearchRez;
-
-        private CurrencyManager currManagerClients;
-        public CurrencyManager CurrencyManagerClients
-        {
-            get { return currManagerClients; }
-            set { currManagerClients = value; }
-        }
-        public SearchClient(MainDataSet mainDataSet)
+        public bool isEdited = false;
+        
+        public SearchClient()
         {
             InitializeComponent();
-            this.MakeStyleForDataGrid();
-            // ВАЖНО
-            // https://stackoverflow.com/questions/14020038/filling-a-datatable-in-c-sharp-using-mysql
-            dtClients = new DataTable();
-
-            dtClients.RowChanged += new DataRowChangeEventHandler(dtSearchRez_RowChanged);
-            dgSearchRez.MouseUp += new MouseEventHandler(dgSearchRez_MouseUp);
-            currManagerClients = (CurrencyManager)this.BindingContext[mainDataSet, "income"];
+            btnFind.Enabled = false;
+            btnGetChanges.Enabled = false;
         }
 
-        private void MakeStyleForDataGrid()
-        {
-            DataGridTableStyle clientsTableStyle = new DataGridTableStyle();
-            clientsTableStyle.MappingName = "clients";
-
-            DataGridTextBoxColumn clientIDStyle = new DataGridTextBoxColumn();
-            clientIDStyle.MappingName = "clientID";
-            clientIDStyle.Width = 50;
-            clientIDStyle.HeaderText = "ID";
-
-            DataGridTextBoxColumn clientFirstNameStyle = new DataGridTextBoxColumn();
-            clientFirstNameStyle.MappingName = "fname";
-            clientFirstNameStyle.Width = 150;
-            clientFirstNameStyle.HeaderText = "Имя";
-
-            DataGridTextBoxColumn clientLastNameStyle = new DataGridTextBoxColumn();
-            clientLastNameStyle.MappingName = "lname";
-            clientLastNameStyle.Width = 150;
-            clientLastNameStyle.HeaderText = "Фамилия";
-
-            DataGridTextBoxColumn clientFatherNameStyle = new DataGridTextBoxColumn();
-            clientFatherNameStyle.MappingName = "fathName";
-            clientFatherNameStyle.Width = 150;
-            clientFatherNameStyle.HeaderText = "Отчество";
-
-            DataGridTextBoxColumn clientLinkDataStyle = new DataGridTextBoxColumn();
-            clientLinkDataStyle.MappingName = "linkData";
-            clientLinkDataStyle.Width = 150;
-            clientLinkDataStyle.HeaderText = "Контакты";
-
-            DataGridTextBoxColumn clientRecordDateStyle = new DataGridTextBoxColumn();
-            clientRecordDateStyle.MappingName = "recorddate";
-            clientRecordDateStyle.Width = 150;
-            clientRecordDateStyle.HeaderText = "Дата записи";
-
-            DataGridTextBoxColumn clientNotesStyle = new DataGridTextBoxColumn();
-            clientNotesStyle.MappingName = "note";
-            clientNotesStyle.Width = 150;
-            clientNotesStyle.HeaderText = "Заметки";
-
-            DataGridTextBoxColumn clientPaymentTypeStyle = new DataGridTextBoxColumn();
-            clientPaymentTypeStyle.MappingName = "paymentType";
-            clientPaymentTypeStyle.Width = 150;
-            clientPaymentTypeStyle.HeaderText = "Вид оплаты";
-
-            clientsTableStyle.GridColumnStyles.AddRange(new DataGridColumnStyle[] {
-                                                                                      clientIDStyle,
-                                                                                      clientFirstNameStyle,
-                                                                                      clientLastNameStyle,
-                                                                                      clientFatherNameStyle,
-                                                                                      clientLinkDataStyle,
-                                                                                      clientRecordDateStyle,
-                                                                                      clientNotesStyle,
-                                                                                      clientPaymentTypeStyle});
-
-            dgSearchRez.TableStyles.Add(clientsTableStyle);
-        }
+        
 
         private void btnExit_Click(object sender, EventArgs e)
         {
@@ -99,6 +33,23 @@ namespace Education_Center.Forms
 
         private void btnFind_Click(object sender, EventArgs e)
         {
+            string partOfQuery = "";
+            if (isDateEdited)
+            {
+                string date = dtpRecDate.Value.ToString("yyyy-MM-dd");
+                partOfQuery = $" AND `recorddate`='{date}'";
+            }
+            string query = $"SELECT * FROM `clients` WHERE `fname` LIKE '%{txtFName.Text}%' AND `lname` LIKE '%{txtLName.Text}%'" + partOfQuery;
+            var list = MySQL.ExecuteQuery(query, 9);
+            dgSearchRez.Rows.Clear();
+            if (list != null)
+                foreach (string[] l in list)
+                {
+                    string[] date = l[5].Split(' ')[0].Split('.');
+                    l[5] = date[2] + "-" + date[1] + "-" + date[0];
+                    dgSearchRez.Rows.Add(l);
+                }
+            
 
         }
 
@@ -106,7 +57,13 @@ namespace Education_Center.Forms
         {
             try
             {
-                //daSearch.Update(dtClients.GetChanges());
+                string date = rowChanged[5].Value.ToString();
+
+                string query = $"UPDATE `clients` SET `fname`='{rowChanged[1].Value}', `lname`='{rowChanged[2].Value}', `fathName`='{rowChanged[3].Value}', " +
+                    $"`linkData`='{rowChanged[4].Value}', `recorddate`='{date}', `note`='{rowChanged[6].Value}', `paymentType`='{rowChanged[7].Value}', " +
+                    $"`isRinged`='{(Convert.ToBoolean(rowChanged[8].Value.ToString()) ? 1 : 0)}' WHERE `clientID`='{rowChanged[0].Value}'";
+                MySQL.ExecuteQueryWithoutResponse(query);
+                isEdited = true;
                 btnGetChanges.Enabled = false;
             }
             catch (Exception ex)
@@ -115,52 +72,32 @@ namespace Education_Center.Forms
             }
         }
 
-        private void dgSearchRez_ShowParentDetailsButtonClick(object sender, EventArgs e)
+        bool isDateEdited = false;
+
+        private void txtLName_Validated(object sender, EventArgs e)
         {
-            MessageBox.Show("OK");
+            if(sender.ToString() == dtpRecDate.ToString())
+                isDateEdited = true;
+            if(!string.IsNullOrEmpty(txtFName.Text) || !string.IsNullOrEmpty(txtLName.Text))
+                btnFind.Enabled = true;
+            else
+                btnFind.Enabled = false;
         }
 
-        private void dtSearchRez_RowChanged(object sender, DataRowChangeEventArgs e)
+        private void dgSearchRez_RowValidating(object sender, DataGridViewCellCancelEventArgs e)
         {
+            var cells = dgSearchRez.Rows[e.RowIndex].Cells;
+            if (cells[1].Value == null || cells[2].Value == null)
+                e.Cancel= true;
+            else
+                e.Cancel= false;
+        }
+
+        DataGridViewCellCollection rowChanged;
+        private void dgSearchRez_RowValidated(object sender, DataGridViewCellEventArgs e)
+        {
+            rowChanged = dgSearchRez.Rows[e.RowIndex].Cells;
             btnGetChanges.Enabled = true;
         }
-
-        private void dgSearchRez_MouseUp(object sender, MouseEventArgs e)
-        {
-            Point point = new Point(e.X, e.Y);
-            int rowIndex = dgSearchRez.CurrentRowIndex;
-
-            if (rowIndex >= 0)
-            {
-                DataGrid.HitTestInfo hti = dgSearchRez.HitTest(point);
-                this.SelectedRow = dvSearchRez[hti.Row].Row;
-            }
-        }
-
-        private void btnOK_Click(object sender, EventArgs e)
-        {
-            
-        }
-
-        private void btnCancel_Click(object sender, EventArgs e)
-        {
-
-        }
-        #region IFindingForm Members
-
-        private DataRow selectedRow;
-        public DataRow SelectedRow
-        {
-            get
-            {
-                return selectedRow;
-            }
-            set
-            {
-                selectedRow = value;
-            }
-        }
-
-        #endregion
     }
 }

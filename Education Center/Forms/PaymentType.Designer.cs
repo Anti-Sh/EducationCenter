@@ -87,7 +87,6 @@
             this.dgPaymentType.TabIndex = 22;
             this.dgPaymentType.DefaultValuesNeeded += new System.Windows.Forms.DataGridViewRowEventHandler(this.dgPaymentType_DefaultValuesNeeded);
             this.dgPaymentType.RowValidating += new System.Windows.Forms.DataGridViewCellCancelEventHandler(this.dgPaymentType_RowValidating);
-            this.dgPaymentType.UserAddedRow += new System.Windows.Forms.DataGridViewRowEventHandler(this.dgPaymentType_UserAddedRow);
             // 
             // payment_typeID
             // 

@@ -76,6 +76,7 @@
             this.splitter3 = new System.Windows.Forms.Splitter();
             this.dgIncome = new System.Windows.Forms.DataGrid();
             this.panel5 = new System.Windows.Forms.Panel();
+            this.lblDateTime = new System.Windows.Forms.Label();
             this.btnShowPaymentTypeForm = new System.Windows.Forms.Button();
             this.btnNextDate = new System.Windows.Forms.Button();
             this.btnPrevDate = new System.Windows.Forms.Button();
@@ -108,7 +109,6 @@
             this.txtOweToEdCenter = new System.Windows.Forms.TextBox();
             this.label8 = new System.Windows.Forms.Label();
             this.cmbFilteringDirection = new System.Windows.Forms.ComboBox();
-            this.lblDateTime = new System.Windows.Forms.Label();
             this.tcManager.SuspendLayout();
             this.tpWaitingRoom.SuspendLayout();
             this.panel2.SuspendLayout();
@@ -149,7 +149,7 @@
             this.tbMain.ShowToolTips = true;
             this.tbMain.Size = new System.Drawing.Size(800, 32);
             this.tbMain.TabIndex = 0;
-            this.tbMain.Click += new System.EventHandler(this.tbMain_Click);
+            this.tbMain.ButtonClick += new System.Windows.Forms.ToolBarButtonClickEventHandler(this.tbMain_ButtonClick);
             // 
             // tbnRefreshMainDB
             // 
@@ -674,6 +674,14 @@
             this.panel5.Size = new System.Drawing.Size(792, 85);
             this.panel5.TabIndex = 0;
             // 
+            // lblDateTime
+            // 
+            this.lblDateTime.AutoSize = true;
+            this.lblDateTime.Location = new System.Drawing.Point(674, 49);
+            this.lblDateTime.Name = "lblDateTime";
+            this.lblDateTime.Size = new System.Drawing.Size(0, 13);
+            this.lblDateTime.TabIndex = 14;
+            // 
             // btnShowPaymentTypeForm
             // 
             this.btnShowPaymentTypeForm.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.25F);
@@ -983,14 +991,6 @@
             this.cmbFilteringDirection.Size = new System.Drawing.Size(203, 21);
             this.cmbFilteringDirection.TabIndex = 0;
             this.cmbFilteringDirection.SelectionChangeCommitted += new System.EventHandler(this.cmbFilteringDirection_SelectionChangeCommitted);
-            // 
-            // lblDateTime
-            // 
-            this.lblDateTime.AutoSize = true;
-            this.lblDateTime.Location = new System.Drawing.Point(674, 49);
-            this.lblDateTime.Name = "lblDateTime";
-            this.lblDateTime.Size = new System.Drawing.Size(0, 13);
-            this.lblDateTime.TabIndex = 14;
             // 
             // Manager
             // 

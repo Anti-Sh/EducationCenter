@@ -28,7 +28,7 @@
         /// </summary>
         private void InitializeComponent()
         {
-            this.dgSearchRez = new System.Windows.Forms.DataGrid();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle1 = new System.Windows.Forms.DataGridViewCellStyle();
             this.panel1 = new System.Windows.Forms.Panel();
             this.btnCancel = new System.Windows.Forms.Button();
             this.btnOK = new System.Windows.Forms.Button();
@@ -41,23 +41,19 @@
             this.btnFind = new System.Windows.Forms.Button();
             this.btnGetChanges = new System.Windows.Forms.Button();
             this.btnExit = new System.Windows.Forms.Button();
-            ((System.ComponentModel.ISupportInitialize)(this.dgSearchRez)).BeginInit();
+            this.dgSearchRez = new System.Windows.Forms.DataGridView();
+            this.clientID = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.fname = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.lname = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.fathName = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.linkData = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.recorddate = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.note = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.paymentType = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.isRinged = new System.Windows.Forms.DataGridViewCheckBoxColumn();
             this.panel1.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.dgSearchRez)).BeginInit();
             this.SuspendLayout();
-            // 
-            // dgSearchRez
-            // 
-            this.dgSearchRez.CaptionBackColor = System.Drawing.Color.OliveDrab;
-            this.dgSearchRez.CaptionFont = new System.Drawing.Font("Microsoft Sans Serif", 12.25F, System.Drawing.FontStyle.Bold);
-            this.dgSearchRez.CaptionForeColor = System.Drawing.SystemColors.ControlLightLight;
-            this.dgSearchRez.CaptionText = "Клиенты";
-            this.dgSearchRez.DataMember = "";
-            this.dgSearchRez.Dock = System.Windows.Forms.DockStyle.Bottom;
-            this.dgSearchRez.HeaderForeColor = System.Drawing.SystemColors.ControlText;
-            this.dgSearchRez.Location = new System.Drawing.Point(0, 154);
-            this.dgSearchRez.Name = "dgSearchRez";
-            this.dgSearchRez.Size = new System.Drawing.Size(624, 266);
-            this.dgSearchRez.TabIndex = 20;
             // 
             // panel1
             // 
@@ -71,6 +67,7 @@
             // 
             // btnCancel
             // 
+            this.btnCancel.DialogResult = System.Windows.Forms.DialogResult.Cancel;
             this.btnCancel.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F);
             this.btnCancel.Location = new System.Drawing.Point(537, 6);
             this.btnCancel.Name = "btnCancel";
@@ -78,10 +75,10 @@
             this.btnCancel.TabIndex = 7;
             this.btnCancel.Text = "Cansel";
             this.btnCancel.UseVisualStyleBackColor = true;
-            this.btnCancel.Click += new System.EventHandler(this.btnCancel_Click);
             // 
             // btnOK
             // 
+            this.btnOK.DialogResult = System.Windows.Forms.DialogResult.OK;
             this.btnOK.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F);
             this.btnOK.Location = new System.Drawing.Point(453, 6);
             this.btnOK.Name = "btnOK";
@@ -89,7 +86,6 @@
             this.btnOK.TabIndex = 6;
             this.btnOK.Text = "OK";
             this.btnOK.UseVisualStyleBackColor = true;
-            this.btnOK.Click += new System.EventHandler(this.btnOK_Click);
             // 
             // label1
             // 
@@ -131,6 +127,7 @@
             this.txtLName.Name = "txtLName";
             this.txtLName.Size = new System.Drawing.Size(249, 23);
             this.txtLName.TabIndex = 24;
+            this.txtLName.Validated += new System.EventHandler(this.txtLName_Validated);
             // 
             // txtFName
             // 
@@ -139,6 +136,7 @@
             this.txtFName.Name = "txtFName";
             this.txtFName.Size = new System.Drawing.Size(249, 23);
             this.txtFName.TabIndex = 25;
+            this.txtFName.Validated += new System.EventHandler(this.txtLName_Validated);
             // 
             // dtpRecDate
             // 
@@ -148,6 +146,7 @@
             this.dtpRecDate.Name = "dtpRecDate";
             this.dtpRecDate.Size = new System.Drawing.Size(249, 23);
             this.dtpRecDate.TabIndex = 26;
+            this.dtpRecDate.Validated += new System.EventHandler(this.txtLName_Validated);
             // 
             // btnFind
             // 
@@ -182,11 +181,110 @@
             this.btnExit.UseVisualStyleBackColor = true;
             this.btnExit.Click += new System.EventHandler(this.btnExit_Click);
             // 
+            // dgSearchRez
+            // 
+            this.dgSearchRez.AllowUserToAddRows = false;
+            this.dgSearchRez.AllowUserToDeleteRows = false;
+            this.dgSearchRez.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            this.dgSearchRez.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
+            this.clientID,
+            this.fname,
+            this.lname,
+            this.fathName,
+            this.linkData,
+            this.recorddate,
+            this.note,
+            this.paymentType,
+            this.isRinged});
+            this.dgSearchRez.Dock = System.Windows.Forms.DockStyle.Bottom;
+            this.dgSearchRez.Location = new System.Drawing.Point(0, 141);
+            this.dgSearchRez.Name = "dgSearchRez";
+            this.dgSearchRez.Size = new System.Drawing.Size(624, 279);
+            this.dgSearchRez.TabIndex = 30;
+            this.dgSearchRez.RowValidated += new System.Windows.Forms.DataGridViewCellEventHandler(this.dgSearchRez_RowValidated);
+            this.dgSearchRez.RowValidating += new System.Windows.Forms.DataGridViewCellCancelEventHandler(this.dgSearchRez_RowValidating);
+            // 
+            // clientID
+            // 
+            this.clientID.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.ColumnHeader;
+            this.clientID.HeaderText = "ID";
+            this.clientID.Name = "clientID";
+            this.clientID.ReadOnly = true;
+            this.clientID.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
+            this.clientID.Width = 24;
+            // 
+            // fname
+            // 
+            this.fname.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.DisplayedCells;
+            this.fname.HeaderText = "Имя";
+            this.fname.Name = "fname";
+            this.fname.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
+            this.fname.Width = 35;
+            // 
+            // lname
+            // 
+            this.lname.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.DisplayedCells;
+            this.lname.HeaderText = "Фамилия";
+            this.lname.Name = "lname";
+            this.lname.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
+            this.lname.Width = 62;
+            // 
+            // fathName
+            // 
+            this.fathName.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.DisplayedCells;
+            this.fathName.HeaderText = "Отчество";
+            this.fathName.Name = "fathName";
+            this.fathName.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
+            this.fathName.Width = 60;
+            // 
+            // linkData
+            // 
+            this.linkData.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.DisplayedCells;
+            this.linkData.HeaderText = "Контактные данные";
+            this.linkData.Name = "linkData";
+            this.linkData.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
+            this.linkData.Width = 104;
+            // 
+            // recorddate
+            // 
+            this.recorddate.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.DisplayedCells;
+            dataGridViewCellStyle1.NullValue = null;
+            this.recorddate.DefaultCellStyle = dataGridViewCellStyle1;
+            this.recorddate.HeaderText = "Дата записи";
+            this.recorddate.Name = "recorddate";
+            this.recorddate.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
+            this.recorddate.Width = 70;
+            // 
+            // note
+            // 
+            this.note.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.DisplayedCells;
+            this.note.HeaderText = "Заметки";
+            this.note.Name = "note";
+            this.note.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
+            this.note.Width = 57;
+            // 
+            // paymentType
+            // 
+            this.paymentType.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.DisplayedCells;
+            this.paymentType.HeaderText = "Вид оплаты";
+            this.paymentType.Name = "paymentType";
+            this.paymentType.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
+            this.paymentType.Width = 65;
+            // 
+            // isRinged
+            // 
+            this.isRinged.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.DisplayedCells;
+            this.isRinged.HeaderText = "Оповещен";
+            this.isRinged.Name = "isRinged";
+            this.isRinged.Resizable = System.Windows.Forms.DataGridViewTriState.True;
+            this.isRinged.Width = 66;
+            // 
             // SearchClient
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(624, 454);
+            this.Controls.Add(this.dgSearchRez);
             this.Controls.Add(this.btnExit);
             this.Controls.Add(this.btnGetChanges);
             this.Controls.Add(this.btnFind);
@@ -196,20 +294,17 @@
             this.Controls.Add(this.label3);
             this.Controls.Add(this.label2);
             this.Controls.Add(this.label1);
-            this.Controls.Add(this.dgSearchRez);
             this.Controls.Add(this.panel1);
             this.Name = "SearchClient";
             this.Text = "SearchClient";
-            ((System.ComponentModel.ISupportInitialize)(this.dgSearchRez)).EndInit();
             this.panel1.ResumeLayout(false);
+            ((System.ComponentModel.ISupportInitialize)(this.dgSearchRez)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
         }
 
         #endregion
-
-        private System.Windows.Forms.DataGrid dgSearchRez;
         private System.Windows.Forms.Panel panel1;
         private System.Windows.Forms.Button btnCancel;
         private System.Windows.Forms.Button btnOK;
@@ -222,5 +317,15 @@
         private System.Windows.Forms.Button btnFind;
         private System.Windows.Forms.Button btnGetChanges;
         private System.Windows.Forms.Button btnExit;
+        private System.Windows.Forms.DataGridView dgSearchRez;
+        private System.Windows.Forms.DataGridViewTextBoxColumn clientID;
+        private System.Windows.Forms.DataGridViewTextBoxColumn fname;
+        private System.Windows.Forms.DataGridViewTextBoxColumn lname;
+        private System.Windows.Forms.DataGridViewTextBoxColumn fathName;
+        private System.Windows.Forms.DataGridViewTextBoxColumn linkData;
+        private System.Windows.Forms.DataGridViewTextBoxColumn recorddate;
+        private System.Windows.Forms.DataGridViewTextBoxColumn note;
+        private System.Windows.Forms.DataGridViewTextBoxColumn paymentType;
+        private System.Windows.Forms.DataGridViewCheckBoxColumn isRinged;
     }
 }

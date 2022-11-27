@@ -98,11 +98,11 @@ namespace Education_Center.Forms
 
         void Manager_Closing(object sender, CancelEventArgs e)
         {
-            string query = "rollback;";
+            string query = "rollback;set autocommit=0;start transaction;";
             if (isEdited)
                 if (MessageBox.Show("Вы хотите сохранить изменения в Базе Данных?", "Образовательный центр", MessageBoxButtons.YesNo) == DialogResult.Yes)
-                    query = "commit;";
-            
+                    query = "commit;set autocommit=0;start transaction;";
+            MySQL.ExecuteQueryWithoutResponse(query);
 
             if (MessageBox.Show("Вы точно хотите выйти?", "Образовательный центр", MessageBoxButtons.YesNo) == DialogResult.No)
             {
@@ -110,7 +110,7 @@ namespace Education_Center.Forms
             }
             else
             {
-                MySQL.ExecuteQueryWithoutResponse(query);
+                MySQL.ExecuteQueryWithoutResponse("rollback;");
                 MySQL.CloseConnection();
                 Application.Exit();
             }
@@ -119,19 +119,7 @@ namespace Education_Center.Forms
         private void tbMain_Click(object sender, EventArgs e)
         {
 
-            return;
-            /*if (e.Button.Equals(tbnFind))
-            {
-                this.SearchClient();
-            }
-            if (e.Button.Equals(tbnEmployees))
-            {
-                this.OpenEmployees();
-            }
-            if (e.Button.Equals(tbnRefreshMainDB))
-            {
-                this.UpdateMainData();
-            }*/
+            
         }
 
         private void btnCreateGroup_Click(object sender, EventArgs e)
@@ -243,31 +231,7 @@ namespace Education_Center.Forms
             int dataID = 0;
             selectedDataNum += 1;
             FillPaymentsPage();
-            /*DataTable data = MySQL.GetDataBase("data");
-            if (currManagerTotal.Position < data.Rows.Count)
-            {
-                currManagerTotal.Position += 1;
-                DataRowView drvDataRow = (DataRowView)currManagerTotal.Current;
-                dataID = (int)drvDataRow.Row["dataID"];
-                DateTime date = (DateTime)drvDataRow.Row["currentDate"];
-                lblDateTime.Text = date.ToString("dd MMMM yyyy");
-            }
-
-            ///////////////////////
-            DataRowView drvData = (DataRowView)currManagerTotal.Current;
-            CalculateTotalPage(drvData.Row);
-            ///////////////////////
-
-            currentDataID = dataID;
-            switch (userGroup)
-            {
-                case frmAuthorization.UserGroup.PManagers:
-                    if (dataID == DataID)
-                        dgIncome.ReadOnly = false;
-                    else
-                        dgIncome.ReadOnly = true;
-                    break;
-            }*/
+                    
         }
 
         private void btnPrevDate_Click(object sender, EventArgs e)
@@ -275,31 +239,7 @@ namespace Education_Center.Forms
             int dataID = 0;
             selectedDataNum -= 1;
             FillPaymentsPage();
-           /* if (currManagerTotal.Position > 0)
-            {
-                currManagerTotal.Position -= 1;
-                DataRowView drvDataRow = (DataRowView)currManagerTotal.Current;
-                dataID = (int)drvDataRow.Row["dataID"];
-                DateTime date = (DateTime)drvDataRow.Row["currentDate"];
-                lblDateTime.Text = date.ToString("dd MMMM yyyy");
-            }
-
-            ///////////////////////
-            DataRowView drvData = (DataRowView)currManagerTotal.Current;
-            CalculateTotalPage(drvData.Row);
-            ///////////////////////
-
-
-            currentDataID = dataID;*/
-            /*switch (userGroup)
-            {
-                case frmAuthorization.UserGroup.PManagers:
-                    if (dataID == DataID)
-                        dgIncome.ReadOnly = false;
-                    else
-                        dgIncome.ReadOnly = true;
-                    break;
-            }*/
+                   
         }
 
         private void btnShowPaymentTypeForm_Click(object sender, EventArgs e)
@@ -1532,6 +1472,46 @@ namespace Education_Center.Forms
             {
                 MessageBox.Show(ex.Message, ex.Source);
             }
+        }
+
+        private void tbMain_ButtonClick(object sender, ToolBarButtonClickEventArgs e)
+        {
+            if (e.Button.Equals(tbnFind))
+            {
+                this.SearchClient();
+            }
+            if (e.Button.Equals(tbnEmployees))
+            {
+                this.OpenEmployees();
+            }
+            if (e.Button.Equals(tbnRefreshMainDB))
+            {
+                this.UpdateMainData();
+            }
+        }
+        private void SearchClient()
+        {
+            SearchClient f = new SearchClient();
+
+            f.ShowDialog();
+
+            if (f.isEdited)
+                isEdited = true;
+        }
+        // Форма сотрудников
+        private void OpenEmployees()
+        {
+            Employee f = new Employee();
+
+            f.ShowDialog();
+
+            if (f.isEdited)
+                isEdited = true;
+        }
+        private void UpdateMainData()
+        {
+            MySQL.ExecuteQueryWithoutResponse("commit;set autocommit=0;start transaction;");
+            MessageBox.Show("Данные успешно загружены в базу данных!");
         }
     }
 }

@@ -29,25 +29,6 @@ namespace Education_Center.Forms
 
         }
 
-        private void dgPaymentType_UserAddedRow(object sender, DataGridViewRowEventArgs e)
-        {
-            /*if (dgPaymentType.Rows.Count > 0)
-            {
-                if (dgPaymentType.Rows[dgPaymentType.Rows.Count - 2].Cells[1] == null || dgPaymentType.Rows[dgPaymentType.Rows.Count - 2].Cells[2] == null)
-                {
-                    dgPaymentType.Rows.RemoveAt(dgPaymentType.Rows.Count - 1);
-                    return;
-                }
-                string queryResult = MySQL.ExecuteQuery("SELECT MAX(`payment_typeID`) FROM `payment_type`") != "" ? MySQL.ExecuteQuery("SELECT MAX(`payment_typeID`) FROM `payment_type`") : "0";
-
-                int nextID = Convert.ToInt32(queryResult) + dgPaymentType.Rows.Count;
-                dgPaymentType[0, dgPaymentType.Rows.Count - 1].Value = nextID;
-
-                //dgPaymentType.Rows[dgPaymentType.Rows.Count - 1] = nextID;
-
-            }*/
-        }
-
         private void dgPaymentType_RowValidating(object sender, DataGridViewCellCancelEventArgs e)
         {
             if( dgPaymentType.Rows[e.RowIndex].Cells[1].Value == null  || dgPaymentType.Rows[e.RowIndex].Cells[1].Value.ToString() == "") {

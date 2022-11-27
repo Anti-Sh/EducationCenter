@@ -28,7 +28,6 @@
         /// </summary>
         private void InitializeComponent()
         {
-            this.dataGrid1 = new System.Windows.Forms.DataGrid();
             this.txtEmployeeFatherName = new System.Windows.Forms.TextBox();
             this.label4 = new System.Windows.Forms.Label();
             this.txtEmployeeFirstName = new System.Windows.Forms.TextBox();
@@ -46,22 +45,18 @@
             this.groupBox1 = new System.Windows.Forms.GroupBox();
             this.btnCancel = new System.Windows.Forms.Button();
             this.btnOK = new System.Windows.Forms.Button();
-            ((System.ComponentModel.ISupportInitialize)(this.dataGrid1)).BeginInit();
+            this.dgEmployees = new System.Windows.Forms.DataGridView();
+            this.employeeID = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.LastName = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.FirstName = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.FatherName = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.linkData = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.birthDay = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.Address = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.Notes = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.groupBox1.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.dgEmployees)).BeginInit();
             this.SuspendLayout();
-            // 
-            // dataGrid1
-            // 
-            this.dataGrid1.CaptionBackColor = System.Drawing.Color.OliveDrab;
-            this.dataGrid1.CaptionForeColor = System.Drawing.SystemColors.ControlLightLight;
-            this.dataGrid1.CaptionText = "Сотрудники";
-            this.dataGrid1.DataMember = "";
-            this.dataGrid1.Dock = System.Windows.Forms.DockStyle.Right;
-            this.dataGrid1.HeaderForeColor = System.Drawing.SystemColors.ControlText;
-            this.dataGrid1.Location = new System.Drawing.Point(216, 0);
-            this.dataGrid1.Name = "dataGrid1";
-            this.dataGrid1.Size = new System.Drawing.Size(584, 450);
-            this.dataGrid1.TabIndex = 1;
             // 
             // txtEmployeeFatherName
             // 
@@ -70,6 +65,7 @@
             this.txtEmployeeFatherName.Name = "txtEmployeeFatherName";
             this.txtEmployeeFatherName.Size = new System.Drawing.Size(187, 23);
             this.txtEmployeeFatherName.TabIndex = 39;
+            this.txtEmployeeFatherName.Validated += new System.EventHandler(this.txtEmployeeFatherName_Validated);
             // 
             // label4
             // 
@@ -89,6 +85,7 @@
             this.txtEmployeeFirstName.Name = "txtEmployeeFirstName";
             this.txtEmployeeFirstName.Size = new System.Drawing.Size(188, 23);
             this.txtEmployeeFirstName.TabIndex = 37;
+            this.txtEmployeeFirstName.Validated += new System.EventHandler(this.txtEmployeeFirstName_Validated);
             // 
             // txtEmployeeLastName
             // 
@@ -97,6 +94,7 @@
             this.txtEmployeeLastName.Name = "txtEmployeeLastName";
             this.txtEmployeeLastName.Size = new System.Drawing.Size(188, 23);
             this.txtEmployeeLastName.TabIndex = 36;
+            this.txtEmployeeLastName.Validated += new System.EventHandler(this.txtEmployeeLastName_Validated);
             // 
             // label2
             // 
@@ -128,6 +126,7 @@
             this.dtpBirthDay.Name = "dtpBirthDay";
             this.dtpBirthDay.Size = new System.Drawing.Size(188, 23);
             this.dtpBirthDay.TabIndex = 41;
+            this.dtpBirthDay.Validated += new System.EventHandler(this.dtpBirthDay_Validated);
             // 
             // label3
             // 
@@ -159,6 +158,7 @@
             this.cmbDirections.Name = "cmbDirections";
             this.cmbDirections.Size = new System.Drawing.Size(188, 25);
             this.cmbDirections.TabIndex = 43;
+            this.cmbDirections.Validated += new System.EventHandler(this.cmbDirections_Validated);
             // 
             // txtEmployeeNotes
             // 
@@ -168,6 +168,7 @@
             this.txtEmployeeNotes.Name = "txtEmployeeNotes";
             this.txtEmployeeNotes.Size = new System.Drawing.Size(187, 61);
             this.txtEmployeeNotes.TabIndex = 45;
+            this.txtEmployeeNotes.Validated += new System.EventHandler(this.txtEmployeeNotes_Validated);
             // 
             // label6
             // 
@@ -189,6 +190,7 @@
             this.btnNext.TabIndex = 47;
             this.btnNext.Text = "Вперед";
             this.btnNext.UseVisualStyleBackColor = true;
+            this.btnNext.Click += new System.EventHandler(this.btnNext_Click);
             // 
             // btnPrev
             // 
@@ -199,6 +201,7 @@
             this.btnPrev.TabIndex = 46;
             this.btnPrev.Text = "Назад";
             this.btnPrev.UseVisualStyleBackColor = true;
+            this.btnPrev.Click += new System.EventHandler(this.btnPrev_Click);
             // 
             // groupBox1
             // 
@@ -212,6 +215,7 @@
             // 
             // btnCancel
             // 
+            this.btnCancel.DialogResult = System.Windows.Forms.DialogResult.Cancel;
             this.btnCancel.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F);
             this.btnCancel.Location = new System.Drawing.Point(135, 416);
             this.btnCancel.Name = "btnCancel";
@@ -222,6 +226,7 @@
             // 
             // btnOK
             // 
+            this.btnOK.DialogResult = System.Windows.Forms.DialogResult.OK;
             this.btnOK.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F);
             this.btnOK.Location = new System.Drawing.Point(54, 416);
             this.btnOK.Name = "btnOK";
@@ -230,11 +235,105 @@
             this.btnOK.Text = "OK";
             this.btnOK.UseVisualStyleBackColor = true;
             // 
+            // dgEmployees
+            // 
+            this.dgEmployees.AllowUserToAddRows = false;
+            this.dgEmployees.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            this.dgEmployees.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
+            this.employeeID,
+            this.LastName,
+            this.FirstName,
+            this.FatherName,
+            this.linkData,
+            this.birthDay,
+            this.Address,
+            this.Notes});
+            this.dgEmployees.Dock = System.Windows.Forms.DockStyle.Right;
+            this.dgEmployees.Location = new System.Drawing.Point(216, 0);
+            this.dgEmployees.Name = "dgEmployees";
+            this.dgEmployees.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
+            this.dgEmployees.Size = new System.Drawing.Size(584, 450);
+            this.dgEmployees.TabIndex = 51;
+            this.dgEmployees.SelectionChanged += new System.EventHandler(this.dgEmployees_SelectionChanged);
+            // 
+            // employeeID
+            // 
+            this.employeeID.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.ColumnHeader;
+            this.employeeID.HeaderText = "ID";
+            this.employeeID.Name = "employeeID";
+            this.employeeID.ReadOnly = true;
+            this.employeeID.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
+            this.employeeID.Width = 24;
+            // 
+            // LastName
+            // 
+            this.LastName.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.DisplayedCells;
+            this.LastName.HeaderText = "Фамилия";
+            this.LastName.Name = "LastName";
+            this.LastName.ReadOnly = true;
+            this.LastName.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
+            this.LastName.Width = 62;
+            // 
+            // FirstName
+            // 
+            this.FirstName.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.DisplayedCells;
+            this.FirstName.HeaderText = "Имя";
+            this.FirstName.Name = "FirstName";
+            this.FirstName.ReadOnly = true;
+            this.FirstName.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
+            this.FirstName.Width = 35;
+            // 
+            // FatherName
+            // 
+            this.FatherName.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.DisplayedCells;
+            this.FatherName.HeaderText = "Отчество";
+            this.FatherName.Name = "FatherName";
+            this.FatherName.ReadOnly = true;
+            this.FatherName.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
+            this.FatherName.Width = 60;
+            // 
+            // linkData
+            // 
+            this.linkData.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.DisplayedCells;
+            this.linkData.HeaderText = "Контакты";
+            this.linkData.Name = "linkData";
+            this.linkData.ReadOnly = true;
+            this.linkData.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
+            this.linkData.Width = 62;
+            // 
+            // birthDay
+            // 
+            this.birthDay.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.DisplayedCells;
+            this.birthDay.HeaderText = "День рождения";
+            this.birthDay.Name = "birthDay";
+            this.birthDay.ReadOnly = true;
+            this.birthDay.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
+            this.birthDay.Width = 84;
+            // 
+            // Address
+            // 
+            this.Address.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.DisplayedCells;
+            this.Address.HeaderText = "Адрес";
+            this.Address.Name = "Address";
+            this.Address.ReadOnly = true;
+            this.Address.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
+            this.Address.Width = 44;
+            // 
+            // Notes
+            // 
+            this.Notes.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.DisplayedCells;
+            this.Notes.HeaderText = "Заметки";
+            this.Notes.Name = "Notes";
+            this.Notes.ReadOnly = true;
+            this.Notes.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
+            this.Notes.Width = 57;
+            // 
             // Employee
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(800, 450);
+            this.Controls.Add(this.dgEmployees);
             this.Controls.Add(this.btnCancel);
             this.Controls.Add(this.btnOK);
             this.Controls.Add(this.groupBox1);
@@ -250,18 +349,16 @@
             this.Controls.Add(this.txtEmployeeLastName);
             this.Controls.Add(this.label2);
             this.Controls.Add(this.label1);
-            this.Controls.Add(this.dataGrid1);
             this.Name = "Employee";
             this.Text = "Сотрудник";
-            ((System.ComponentModel.ISupportInitialize)(this.dataGrid1)).EndInit();
             this.groupBox1.ResumeLayout(false);
+            ((System.ComponentModel.ISupportInitialize)(this.dgEmployees)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
         }
 
         #endregion
-        private System.Windows.Forms.DataGrid dataGrid1;
         private System.Windows.Forms.TextBox txtEmployeeFatherName;
         private System.Windows.Forms.Label label4;
         private System.Windows.Forms.TextBox txtEmployeeFirstName;
@@ -279,5 +376,14 @@
         private System.Windows.Forms.GroupBox groupBox1;
         private System.Windows.Forms.Button btnCancel;
         private System.Windows.Forms.Button btnOK;
+        private System.Windows.Forms.DataGridView dgEmployees;
+        private System.Windows.Forms.DataGridViewTextBoxColumn employeeID;
+        private System.Windows.Forms.DataGridViewTextBoxColumn LastName;
+        private System.Windows.Forms.DataGridViewTextBoxColumn FirstName;
+        private System.Windows.Forms.DataGridViewTextBoxColumn FatherName;
+        private System.Windows.Forms.DataGridViewTextBoxColumn linkData;
+        private System.Windows.Forms.DataGridViewTextBoxColumn birthDay;
+        private System.Windows.Forms.DataGridViewTextBoxColumn Address;
+        private System.Windows.Forms.DataGridViewTextBoxColumn Notes;
     }
 }
